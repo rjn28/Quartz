@@ -9,7 +9,7 @@
       <img src="https://img.shields.io/badge/Download-macOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download for macOS">
     </a>
     <img src="https://img.shields.io/badge/SwiftUI-Native-blue?style=for-the-badge&logo=swift&logoColor=white" alt="Built with SwiftUI">
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
+    <img src="https://img.shields.io/badge/License-Non--Commercial-red?style=for-the-badge" alt="License Non-Commercial">
     <a href="https://www.linkedin.com/in/roch-junior-nicolas-le-dev/">
   <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Connect on LinkedIn">
 </a>
