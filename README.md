@@ -27,11 +27,11 @@
 Quartz is a native macOS application designed to eliminate friction between your brain and the screen. It acts as an ephemeral whiteboard—always ready, beautifully simple.
 
 ### Key Features
-* **🎨 Glassmorphism UI:** A modern, translucent interface that blends into your macOS Sonoma/Sequoia desktop.
+* **🎨 Glassmorphism UI:** A modern, translucent interface that blends into your macOS Tahoe desktop.
 * **🧘 Zen Mode:** The interface fades away while you type. Focus entirely on your words.
 * **🚀 Magic Drag Export:** Finished writing? Simply drag the `TXT` floating button onto your desktop or into an email to instantly create a file.
 * **📊 Smart Stats:** Click the counter to toggle between Word Count, Character Count, and Reading Time.
-* **⚡️ Native Performance:** Built with Swift 5.9 and SwiftUI.
+* **⚡️ Native Performance:** Built with Swift and SwiftUI.
 
 ---
 
