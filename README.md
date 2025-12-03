@@ -1,4 +1,4 @@
-div align="center">
+<div align="center">
   <img src="docs/logo.png" width="128" height="128" style="border-radius: 22%; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
 
   # 💎 Quartz
@@ -22,7 +22,7 @@ div align="center">
 
 ---
 
-## ✨ Overview
+## Overview
 
 Quartz is a native macOS application designed to eliminate friction between your brain and the screen. It acts as an ephemeral whiteboard—always ready, beautifully simple.
 
