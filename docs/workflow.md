@@ -1,6 +1,6 @@
 # 🔄 Workflow de Mise à Jour de l'Application
 
-Ce document explique comment déployer une nouvelle version de l'application Whiteboard.
+Ce document explique comment déployer une nouvelle version de l'application Quartz.
 
 ## Le Cycle de Vie (3 Étapes)
 

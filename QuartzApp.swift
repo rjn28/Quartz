@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct WhiteboardApp: App {
+struct QuartzApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

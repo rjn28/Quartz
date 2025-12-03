@@ -1,38 +1,64 @@
 #!/bin/bash
 
 # --- CONFIGURATION ---
-APP_NAME="Whiteboard"
-# D'après ta capture d'écran, l'exécutable généré par Swift s'appelle "Whiteboard"
-EXECUTABLE_NAME="WhiteboardApp"
-DMG_NAME="Whiteboard_Installer.dmg"
+APP_NAME="Quartz"
+EXECUTABLE_NAME="QuartzApp"
+DMG_NAME="Quartz_Installer.dmg"
 
-# --- 1. NETTOYAGE & COMPILATION (MODE RELEASE) ---
-echo "🧹 Nettoyage et compilation en mode RELEASE..."
+# --- 1. NETTOYAGE ---
+echo "🧹 Nettoyage..."
 rm -rf .build
 rm -rf "$APP_NAME.app"
+rm -rf "TempIcon.iconset"
+rm -f "AppIcon.icns"
 rm -f "$DMG_NAME"
 
-# On compile en mode optimisé (Release)
+# --- 2. COMPILATION DU CODE ---
+echo "🔨 Compilation du code..."
 swift build -c release -Xswiftc -O
 
-# On définit le chemin vers le binaire compilé
 BUILD_PATH=".build/release/$EXECUTABLE_NAME"
 
-# Vérification que la compilation a réussi
 if [ ! -f "$BUILD_PATH" ]; then
-    echo "❌ Erreur : L'exécutable n'a pas été trouvé à $BUILD_PATH"
+    echo "❌ Erreur : L'exécutable n'a pas été trouvé."
     exit 1
 fi
 
-# --- 2. CRÉATION DU PAQUET .APP ---
-echo "📦 Création de $APP_NAME.app..."
+# --- 3. ASSEMBLAGE ---
+echo "📦 Assemblage de $APP_NAME.app..."
 mkdir -p "$APP_NAME.app/Contents/MacOS"
 mkdir -p "$APP_NAME.app/Contents/Resources"
 
-# Copie de l'exécutable
+# A. Copie du moteur
 cp "$BUILD_PATH" "$APP_NAME.app/Contents/MacOS/$APP_NAME"
 
-# Création du Info.plist (Indispensable pour macOS)
+# B. FABRICATION MANUELLE DE L'ICÔNE (Sans Xcode)
+echo "🎨 Création de l'icône via iconutil..."
+
+# 1. On crée un dossier temporaire au format que macOS aime
+mkdir -p "TempIcon.iconset"
+
+# 2. On copie ta grande image 1024.png et on la renomme comme macOS le veut
+# (On utilise l'image HD pour l'affichage Retina)
+SOURCE_ICON="Resources/Assets.xcassets/AppIcon.appiconset/1024.png"
+
+if [ -f "$SOURCE_ICON" ]; then
+    cp "$SOURCE_ICON" "TempIcon.iconset/icon_512x512@2x.png"
+    
+    # 3. On utilise l'outil natif 'iconutil' pour créer le fichier .icns
+    iconutil -c icns "TempIcon.iconset" -o "AppIcon.icns"
+    
+    # 4. On déplace le fichier final dans l'application
+    mv "AppIcon.icns" "$APP_NAME.app/Contents/Resources/"
+    echo "   ✅ Icône .icns générée et injectée !"
+else
+    echo "❌ ERREUR : L'image 1024.png est introuvable à $SOURCE_ICON"
+fi
+
+# Nettoyage du dossier temporaire
+rm -rf "TempIcon.iconset"
+
+# C. Création du Info.plist
 cat > "$APP_NAME.app/Contents/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -41,9 +67,11 @@ cat > "$APP_NAME.app/Contents/Info.plist" <<EOF
     <key>CFBundleExecutable</key>
     <string>$APP_NAME</string>
     <key>CFBundleIdentifier</key>
-    <string>com.rjn28.$APP_NAME</string>
+    <string>com.rjn28.Quartz</string>
     <key>CFBundleName</key>
     <string>$APP_NAME</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -58,22 +86,13 @@ cat > "$APP_NAME.app/Contents/Info.plist" <<EOF
 </plist>
 EOF
 
-# --- 3. CRÉATION DU DMG (IMAGE DISQUE) ---
-echo "💿 Création du fichier $DMG_NAME..."
-
-# Création d'un dossier temporaire pour le DMG
+# --- 4. PACKAGING ---
+echo "💿 Création du DMG..."
 mkdir -p dist
 cp -r "$APP_NAME.app" dist/
-
-# Création du lien symbolique vers le dossier Applications (pour le drag & drop)
 ln -s /Applications dist/Applications
-
-# Utilisation de l'outil natif d'Apple pour créer le DMG
-hdiutil create -volname "$APP_NAME" -srcfolder dist -ov -format UDZO "$DMG_NAME"
-
-# Nettoyage final
+hdiutil create -volname "$APP_NAME" -srcfolder dist -ov -format UDZO "$DMG_NAME" > /dev/null
 rm -rf dist
 rm -rf "$APP_NAME.app"
 
-echo "✅ SUCCÈS ! Le fichier $DMG_NAME est prêt à être uploadé sur GitHub."
-ls -lh "$DMG_NAME"
+echo "✅ TERMINÉ ! Lance $DMG_NAME."

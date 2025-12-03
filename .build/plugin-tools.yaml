@@ -4,62 +4,62 @@ client:
 tools: {}
 targets:
   "PackageStructure": ["<PackageStructure>"]
-  "WhiteboardApp-arm64-apple-macosx26.0-release.exe": ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>"]
-  "WhiteboardApp-arm64-apple-macosx26.0-release.module": ["<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
-  "main": ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>","<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
-  "test": ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>","<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
+  "QuartzApp-arm64-apple-macosx26.0-release.exe": ["<QuartzApp-arm64-apple-macosx26.0-release.exe>"]
+  "QuartzTarget-arm64-apple-macosx26.0-release.module": ["<QuartzTarget-arm64-apple-macosx26.0-release.module>"]
+  "main": ["<QuartzApp-arm64-apple-macosx26.0-release.exe>","<QuartzTarget-arm64-apple-macosx26.0-release.module>"]
+  "test": ["<QuartzApp-arm64-apple-macosx26.0-release.exe>","<QuartzTarget-arm64-apple-macosx26.0-release.module>"]
 default: "main"
 nodes:
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/":
+  "/Users/rochjuniornicolas/DEV/Quartz/":
     is-directory-structure: true
     content-exclusion-patterns: [".git",".build"]
 commands:
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources":
+  "/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp.product/Objects.LinkFileList":
     tool: write-auxiliary-file
-    inputs: ["<sources-file-list>","/Users/rochjuniornicolas/DEV/WhiteboardApp/ContentView.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardApp.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardViewModel.swift"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources"]
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources"
+    inputs: ["<link-file-list>","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzApp.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzViewModel.swift.o"]
+    outputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp.product/Objects.LinkFileList"
 
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList":
+  "/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/sources":
     tool: write-auxiliary-file
-    inputs: ["<link-file-list>","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList"]
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList"
+    inputs: ["<sources-file-list>","/Users/rochjuniornicolas/DEV/Quartz/ContentView.swift","/Users/rochjuniornicolas/DEV/Quartz/QuartzApp.swift","/Users/rochjuniornicolas/DEV/Quartz/QuartzViewModel.swift"]
+    outputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/sources"]
+    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/sources"
 
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt":
+  "/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt":
     tool: write-auxiliary-file
     inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"]
+    outputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"]
     always-out-of-date: "true"
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
 
-  "<WhiteboardApp-arm64-apple-macosx26.0-release.exe>":
+  "<QuartzApp-arm64-apple-macosx26.0-release.exe>":
     tool: phony
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp"]
-    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>"]
+    inputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp"]
+    outputs: ["<QuartzApp-arm64-apple-macosx26.0-release.exe>"]
 
-  "<WhiteboardApp-arm64-apple-macosx26.0-release.module>":
+  "<QuartzTarget-arm64-apple-macosx26.0-release.module>":
     tool: phony
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules/WhiteboardApp.swiftmodule"]
-    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
+    inputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzApp.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzViewModel.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/Modules/QuartzTarget.swiftmodule"]
+    outputs: ["<QuartzTarget-arm64-apple-macosx26.0-release.module>"]
 
-  "C.WhiteboardApp-arm64-apple-macosx26.0-release.exe":
+  "C.QuartzApp-arm64-apple-macosx26.0-release.exe":
     tool: shell
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp"]
-    description: "Linking ./.build/arm64-apple-macosx/release/WhiteboardApp"
-    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release","-o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp","-module-name","WhiteboardApp","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_WhiteboardApp_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-O"]
+    inputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzApp.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzViewModel.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp.product/Objects.LinkFileList"]
+    outputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp"]
+    description: "Linking ./.build/arm64-apple-macosx/release/QuartzApp"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release","-o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp","-module-name","QuartzApp","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_QuartzTarget_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzApp.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-O"]
 
-  "C.WhiteboardApp-arm64-apple-macosx26.0-release.module":
+  "C.QuartzTarget-arm64-apple-macosx26.0-release.module":
     tool: shell
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/ContentView.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardApp.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardViewModel.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules/WhiteboardApp.swiftmodule"]
-    description: "Compiling Swift Module 'WhiteboardApp' (3 sources)"
-    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","WhiteboardApp","-emit-dependencies","-emit-module","-emit-module-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules/WhiteboardApp.swiftmodule","-output-file-map","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/output-file-map.json","-whole-module-optimization","-num-threads","8","-c","@/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources","-I","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx14.0","-whole-module-optimization","-num-threads","8","-serialize-diagnostics","-O","-j8","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","WhiteboardApp_main","-color-diagnostics","-swift-version","5","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-O","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","whiteboardapp"]
+    inputs: ["/Users/rochjuniornicolas/DEV/Quartz/ContentView.swift","/Users/rochjuniornicolas/DEV/Quartz/QuartzApp.swift","/Users/rochjuniornicolas/DEV/Quartz/QuartzViewModel.swift","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/sources"]
+    outputs: ["/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzApp.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/QuartzViewModel.swift.o","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/Modules/QuartzTarget.swiftmodule"]
+    description: "Compiling Swift Module 'QuartzTarget' (3 sources)"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","QuartzTarget","-emit-dependencies","-emit-module","-emit-module-path","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/Modules/QuartzTarget.swiftmodule","-output-file-map","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/output-file-map.json","-whole-module-optimization","-num-threads","8","-c","@/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/QuartzTarget.build/sources","-I","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx14.0","-whole-module-optimization","-num-threads","8","-serialize-diagnostics","-O","-j8","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/rochjuniornicolas/DEV/Quartz/.build/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","QuartzTarget_main","-color-diagnostics","-swift-version","5","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-O","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","quartz"]
 
   "PackageStructure":
     tool: package-structure-tool
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/","/Users/rochjuniornicolas/DEV/WhiteboardApp/Package.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/Package.resolved"]
+    inputs: ["/Users/rochjuniornicolas/DEV/Quartz/","/Users/rochjuniornicolas/DEV/Quartz/Package.swift","/Users/rochjuniornicolas/DEV/Quartz/Package.resolved"]
     outputs: ["<PackageStructure>"]
     description: "Planning build"
     allow-missing-inputs: true
