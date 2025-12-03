@@ -4,73 +4,58 @@ client:
 tools: {}
 targets:
   "PackageStructure": ["<PackageStructure>"]
-  "WhiteboardApp-arm64-apple-macosx26.0-debug.exe": ["<WhiteboardApp-arm64-apple-macosx26.0-debug.exe>"]
-  "WhiteboardApp-arm64-apple-macosx26.0-debug.module": ["<WhiteboardApp-arm64-apple-macosx26.0-debug.module>"]
-  "main": ["<WhiteboardApp-arm64-apple-macosx26.0-debug.exe>","<WhiteboardApp-arm64-apple-macosx26.0-debug.module>"]
-  "test": ["<WhiteboardApp-arm64-apple-macosx26.0-debug.exe>","<WhiteboardApp-arm64-apple-macosx26.0-debug.module>"]
+  "WhiteboardApp-arm64-apple-macosx26.0-release.exe": ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>"]
+  "WhiteboardApp-arm64-apple-macosx26.0-release.module": ["<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
+  "main": ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>","<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
+  "test": ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>","<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
 default: "main"
 nodes:
   "/Users/rochjuniornicolas/DEV/WhiteboardApp/":
     is-directory-structure: true
     content-exclusion-patterns: [".git",".build"]
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp":
-    is-mutated: true
 commands:
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp-entitlement.plist":
-    tool: write-auxiliary-file
-    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp-entitlement.plist"]
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp-entitlement.plist"
-
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/sources":
+  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources":
     tool: write-auxiliary-file
     inputs: ["<sources-file-list>","/Users/rochjuniornicolas/DEV/WhiteboardApp/ContentView.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardApp.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardViewModel.swift"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/sources"]
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/sources"
+    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources"]
+    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources"
 
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.product/Objects.LinkFileList":
+  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList":
     tool: write-auxiliary-file
-    inputs: ["<link-file-list>","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardViewModel.swift.o"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.product/Objects.LinkFileList"]
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.product/Objects.LinkFileList"
+    inputs: ["<link-file-list>","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o"]
+    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList"
 
-  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt":
+  "/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt":
     tool: write-auxiliary-file
     inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"]
+    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"]
     always-out-of-date: "true"
-    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+    description: "Write auxiliary file /Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
 
-  "<WhiteboardApp-arm64-apple-macosx26.0-debug.exe>":
+  "<WhiteboardApp-arm64-apple-macosx26.0-release.exe>":
     tool: phony
-    inputs: ["<WhiteboardApp-arm64-apple-macosx26.0-debug.exe-CodeSigning>"]
-    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-debug.exe>"]
+    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp"]
+    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-release.exe>"]
 
-  "<WhiteboardApp-arm64-apple-macosx26.0-debug.module>":
+  "<WhiteboardApp-arm64-apple-macosx26.0-release.module>":
     tool: phony
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/Modules/WhiteboardApp.swiftmodule"]
-    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-debug.module>"]
+    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules/WhiteboardApp.swiftmodule"]
+    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-release.module>"]
 
-  "C.WhiteboardApp-arm64-apple-macosx26.0-debug.exe":
+  "C.WhiteboardApp-arm64-apple-macosx26.0-release.exe":
     tool: shell
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.product/Objects.LinkFileList"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp"]
-    description: "Linking ./.build/arm64-apple-macosx/debug/WhiteboardApp"
-    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug","-o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp","-module-name","WhiteboardApp","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-alias","-Xlinker","_WhiteboardApp_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-Xlinker","-add_ast_path","-Xlinker","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/Modules/WhiteboardApp.swiftmodule","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g"]
+    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList"]
+    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp"]
+    description: "Linking ./.build/arm64-apple-macosx/release/WhiteboardApp"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release","-o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp","-module-name","WhiteboardApp","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_WhiteboardApp_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-O"]
 
-  "C.WhiteboardApp-arm64-apple-macosx26.0-debug.exe-entitlements":
+  "C.WhiteboardApp-arm64-apple-macosx26.0-release.module":
     tool: shell
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp-entitlement.plist"]
-    outputs: ["<WhiteboardApp-arm64-apple-macosx26.0-debug.exe-CodeSigning>"]
-    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/WhiteboardApp"
-    args: ["codesign","--force","--sign","-","--entitlements","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp-entitlement.plist","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp"]
-
-  "C.WhiteboardApp-arm64-apple-macosx26.0-debug.module":
-    tool: shell
-    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/ContentView.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardApp.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardViewModel.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/sources"]
-    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/Modules/WhiteboardApp.swiftmodule"]
+    inputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/ContentView.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardApp.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/WhiteboardViewModel.swift","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources"]
+    outputs: ["/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/ContentView.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardApp.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/WhiteboardViewModel.swift.o","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules/WhiteboardApp.swiftmodule"]
     description: "Compiling Swift Module 'WhiteboardApp' (3 sources)"
-    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","WhiteboardApp","-emit-dependencies","-emit-module","-emit-module-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/Modules/WhiteboardApp.swiftmodule","-output-file-map","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/output-file-map.json","-incremental","-c","@/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/WhiteboardApp.build/sources","-I","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx14.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j8","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","WhiteboardApp_main","-color-diagnostics","-swift-version","5","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","whiteboardapp"]
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","WhiteboardApp","-emit-dependencies","-emit-module","-emit-module-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules/WhiteboardApp.swiftmodule","-output-file-map","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/output-file-map.json","-whole-module-optimization","-num-threads","8","-c","@/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/WhiteboardApp.build/sources","-I","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx14.0","-whole-module-optimization","-num-threads","8","-serialize-diagnostics","-O","-j8","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/rochjuniornicolas/DEV/WhiteboardApp/.build/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","WhiteboardApp_main","-color-diagnostics","-swift-version","5","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-O","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","whiteboardapp"]
 
   "PackageStructure":
     tool: package-structure-tool

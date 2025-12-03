@@ -6,3 +6,4 @@ build/
 Whiteboard
 .build/
 .DS_Store
+*.dmg
