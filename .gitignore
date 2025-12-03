@@ -3,3 +3,6 @@ DerivedData/
 build/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
+Whiteboard
+.build/
+.DS_Store
