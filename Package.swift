@@ -20,7 +20,8 @@ let package = Package(
                 "bundle_app.sh", 
                 "docs",
                 "Resources",
-                ".gitignore"
+                ".gitignore",
+                "README.md"
                 // J'ai retiré TOUTES les lignes .dmg ici
             ],
             resources: [

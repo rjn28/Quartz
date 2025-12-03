@@ -32,30 +32,36 @@ mkdir -p "$APP_NAME.app/Contents/Resources"
 # A. Copie du moteur
 cp "$BUILD_PATH" "$APP_NAME.app/Contents/MacOS/$APP_NAME"
 
-# B. FABRICATION MANUELLE DE L'ICÔNE (Sans Xcode)
+# B. FABRICATION MANUELLE DE L'ICÔNE (Le retour !)
 echo "🎨 Création de l'icône via iconutil..."
 
-# 1. On crée un dossier temporaire au format que macOS aime
+# On crée le dossier temporaire
 mkdir -p "TempIcon.iconset"
 
-# 2. On copie ta grande image 1024.png et on la renomme comme macOS le veut
-# (On utilise l'image HD pour l'affichage Retina)
-SOURCE_ICON="Resources/Assets.xcassets/AppIcon.appiconset/1024.png"
+# IMPORTANT : On cherche ton image 1024.png. 
+# Comme on a déplacé le dossier dans Sources, le chemin est maintenant ici :
+SOURCE_ICON="Sources/QuartzTarget/Assets.xcassets/AppIcon.appiconset/1024.png"
+
+# Si jamais tu as remis le dossier à la racine (Resources), on vérifie aussi là-bas :
+if [ ! -f "$SOURCE_ICON" ]; then
+    SOURCE_ICON="Resources/Assets.xcassets/AppIcon.appiconset/1024.png"
+fi
 
 if [ -f "$SOURCE_ICON" ]; then
+    # On prépare l'image pour l'outil
     cp "$SOURCE_ICON" "TempIcon.iconset/icon_512x512@2x.png"
     
-    # 3. On utilise l'outil natif 'iconutil' pour créer le fichier .icns
+    # On convertit en .icns (Format Mac)
     iconutil -c icns "TempIcon.iconset" -o "AppIcon.icns"
     
-    # 4. On déplace le fichier final dans l'application
+    # On injecte dans l'app
     mv "AppIcon.icns" "$APP_NAME.app/Contents/Resources/"
     echo "   ✅ Icône .icns générée et injectée !"
 else
-    echo "❌ ERREUR : L'image 1024.png est introuvable à $SOURCE_ICON"
+    echo "❌ ERREUR : Impossible de trouver 1024.png (ni dans Sources ni dans Resources)"
 fi
 
-# Nettoyage du dossier temporaire
+# Nettoyage
 rm -rf "TempIcon.iconset"
 
 # C. Création du Info.plist
@@ -86,7 +92,11 @@ cat > "$APP_NAME.app/Contents/Info.plist" <<EOF
 </plist>
 EOF
 
-# --- 4. PACKAGING ---
+# --- 4. SIGNATURE (Pour éviter "Endommagé") ---
+echo "🔏 Signature Ad-Hoc..."
+codesign --force --deep --sign - "$APP_NAME.app"
+
+# --- 5. PACKAGING ---
 echo "💿 Création du DMG..."
 mkdir -p dist
 cp -r "$APP_NAME.app" dist/
