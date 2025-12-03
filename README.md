@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/logoquartz.png" width="128" height="128" style="border-radius: 22%; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+  <img src="docs/logoquartz-min.png" width="128" height="128" style="border-radius: 22%; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
 
   # 💎 Quartz
   **The purest thinking space for macOS.**
