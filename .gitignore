@@ -7,3 +7,4 @@ Quartz
 .build/
 .DS_Store
 *.dmg
+CONTRIBUTING.md
