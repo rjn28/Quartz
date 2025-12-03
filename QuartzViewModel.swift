@@ -11,14 +11,14 @@ enum TextStatType: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-class WhiteboardViewModel: ObservableObject {
+class QuartzViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var text: String = ""
     @Published var isDarkMode: Bool = false
     @Published var selectedStat: TextStatType = .words
     
     // MARK: - Private Properties
-    private let textKey = "whiteboard_text_persistence"
+    private let textKey = "Quartz_text_persistence"
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
@@ -59,7 +59,7 @@ class WhiteboardViewModel: ObservableObject {
         }
     }
     
-    /// Clears the whiteboard content
+    /// Clears the Quartz content
     func clearBoard() {
         withAnimation(.easeOut(duration: 0.2)) {
             text = ""
@@ -115,7 +115,7 @@ class WhiteboardViewModel: ObservableObject {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH-mm-ss"
         let dateString = formatter.string(from: Date())
-        let fileName = "Whiteboard Note \(dateString).txt"
+        let fileName = "Quartz Note \(dateString).txt"
         
         // Get Desktop Directory safely
         guard let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first else {

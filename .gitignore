@@ -3,7 +3,7 @@ DerivedData/
 build/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
-Whiteboard
+Quartz
 .build/
 .DS_Store
 *.dmg

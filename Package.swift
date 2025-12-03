@@ -2,26 +2,30 @@
 import PackageDescription
 
 let package = Package(
-    name: "WhiteboardApp",
+    name: "Quartz",
     platforms: [
         .macOS(.v14)
     ],
     products: [
-        .executable(name: "WhiteboardApp", targets: ["WhiteboardApp"])
+        .executable(
+            name: "QuartzApp",
+            targets: ["QuartzTarget"]),
     ],
     targets: [
         .executableTarget(
-            name: "WhiteboardApp",
+            name: "QuartzTarget",
+            dependencies: [],
             path: ".",
             exclude: [
-                "Whiteboard.app",
-                "bundle_app.sh"
+                "bundle_app.sh", 
+                "docs",
+                "Resources",
+                ".gitignore"
+                // J'ai retiré TOUTES les lignes .dmg ici
             ],
-            sources: [
-                "WhiteboardApp.swift",
-                "ContentView.swift",
-                "WhiteboardViewModel.swift"
+            resources: [
+                .process("Resources")
             ]
-        )
+        ),
     ]
 )

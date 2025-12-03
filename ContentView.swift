@@ -2,7 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ContentView: View {
-    @StateObject private var viewModel = WhiteboardViewModel()
+    @StateObject private var viewModel = QuartzViewModel()
     @FocusState private var isFocused: Bool
     @State private var showClearConfirmation = false
     
@@ -158,7 +158,7 @@ struct ContentView: View {
             }
             .buttonStyle(.plain)
             .help("Clear Board")
-            .confirmationDialog("Clear Whiteboard?", isPresented: $showClearConfirmation) {
+            .confirmationDialog("Clear Quartz?", isPresented: $showClearConfirmation) {
                 Button("Clear All", role: .destructive) {
                     viewModel.clearBoard()
                 }
