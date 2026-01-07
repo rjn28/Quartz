@@ -76,32 +76,6 @@ If Method 1 does not work:
 
 ---
 
-## 🛠 Building from Source
-
-This project uses a custom Bash script to handle asset compilation and packaging (no `.xcodeproj` required).
-
-**Prerequisites:**
-* macOS 14.0 (Sonoma) or later.
-* Swift 5.9+ installed via Command Line Tools.
-
-**Build Instructions:**
-
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/rjn28/Quartz.git](https://github.com/rjn28/Quartz.git)
-    cd Quartz
-    ```
-
-2.  Run the custom build script:
-    ```bash
-    chmod +x bundle_app.sh
-    ./bundle_app.sh
-    ```
-
-3.  The script will compile the app, inject the icon manually, sign it locally, and generate a `Quartz_Installer.dmg`.
-
----
-
 ## 👨‍💻 Tech Stack
 
 * **Language:** Swift 5
