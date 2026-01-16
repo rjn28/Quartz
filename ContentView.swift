@@ -5,6 +5,7 @@ struct ContentView: View {
     @StateObject private var viewModel = QuartzViewModel()
     @FocusState private var isFocused: Bool
     @State private var showClearConfirmation = false
+    @State private var showDrawingCanvas = false
     
     // UI State
     @State private var controlsOpacity: Double = 1.0
@@ -127,6 +128,13 @@ struct ContentView: View {
             .animation(.easeInOut(duration: 0.3), value: controlsOpacity)
             // Allow touches to pass through empty areas of the ZStack to the TextEditor
             .allowsHitTesting(controlsOpacity > 0) // Only block if visible (and even then, we want pass-through)
+            
+            // MARK: - Drawing Canvas Overlay
+            if showDrawingCanvas {
+                DrawingCanvasView(isPresented: $showDrawingCanvas, isDarkMode: viewModel.isDarkMode)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(100)
+            }
 
         }
         .onAppear {
@@ -264,6 +272,23 @@ struct ContentView: View {
             }
             .menuStyle(.borderlessButton)
             .fixedSize()
+            
+            Rectangle()
+                .fill(Color.primary.opacity(0.2))
+                .frame(width: 1, height: 16)
+            
+            // Drawing Canvas Toggle
+            Button(action: {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showDrawingCanvas.toggle()
+                }
+            }) {
+                Image(systemName: "pencil.and.scribble")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(showDrawingCanvas ? .blue : .primary)
+            }
+            .buttonStyle(.plain)
+            .help("Drawing Canvas")
             
             Rectangle()
                 .fill(Color.primary.opacity(0.2))
