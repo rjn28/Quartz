@@ -114,12 +114,16 @@ struct ContentView: View {
                     )
                     .padding(.bottom, 20) // Move to the bottom with some padding
                 
-                // Bottom Right TXT Button (kept at bottom right via Spacer)
+                // Bottom Right Export Button (kept at bottom right via Spacer)
                 VStack {
                     Spacer()
                     HStack {
                         Spacer()
-                        txtExportButton
+                        if viewModel.isPreviewMode {
+                            pdfExportButton
+                        } else {
+                            txtExportButton
+                        }
                     }
                     .padding(20)
                 }
@@ -356,6 +360,63 @@ struct ContentView: View {
         .help("Click to save to Desktop, Drag to export")
     }
     
+    var pdfExportButton: some View {
+        Button(action: {
+            if let fileURL = generatePDFURL() {
+                let fm = FileManager.default
+                if let desktopURL = fm.urls(for: .desktopDirectory, in: .userDomainMask).first {
+                    let destURL = desktopURL.appendingPathComponent(fileURL.lastPathComponent)
+                    try? fm.copyItem(at: fileURL, to: destURL)
+                }
+            }
+        }) {
+            Text("PDF")
+                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(.ultraThinMaterial, in: Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(.white.opacity(0.2), lineWidth: 0.5)
+                )
+                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        }
+        .buttonStyle(.plain)
+        .onDrag {
+            if let fileURL = generatePDFURL() {
+                return NSItemProvider(contentsOf: fileURL)!
+            }
+            return NSItemProvider()
+        }
+        .help("Click to save PDF to Desktop, Drag to export")
+    }
+    
+    @MainActor
+    private func generatePDFURL() -> URL? {
+        let preview = MarkdownPreview(text: viewModel.text, fontSize: viewModel.fontSize.rawValue, isDarkMode: false, isForExport: true)
+            .padding(40)
+            .frame(width: 595, alignment: .leading)
+            .background(Color.white)
+        
+        let renderer = ImageRenderer(content: preview)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
+        let dateString = formatter.string(from: Date())
+        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("Quartz Note \(dateString).pdf")
+        
+        renderer.render { size, context in
+            var box = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            guard let pdf = CGContext(fileURL as CFURL, mediaBox: &box, nil) else { return }
+            pdf.beginPDFPage(nil)
+            context(pdf)
+            pdf.endPDFPage()
+            pdf.closePDF()
+        }
+        return fileURL
+    }
+    
     // MARK: - Logic
     
     func startInactivityTimer() {
@@ -399,14 +460,27 @@ struct MarkdownPreview: View {
     let text: String
     let fontSize: CGFloat
     let isDarkMode: Bool
+    var isForExport: Bool = false
     
     var body: some View {
-        LazyVStack(alignment: .leading, spacing: 8) {
-            ForEach(Array(text.components(separatedBy: .newlines).enumerated()), id: \.offset) { _, line in
-                mapLineToView(line)
+        if isForExport {
+            VStack(alignment: .leading, spacing: 8) {
+                contentLines
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            LazyVStack(alignment: .leading, spacing: 8) {
+                contentLines
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    @ViewBuilder
+    private var contentLines: some View {
+        ForEach(Array(text.components(separatedBy: .newlines).enumerated()), id: \.offset) { _, line in
+            mapLineToView(line)
+        }
     }
     
     @ViewBuilder
