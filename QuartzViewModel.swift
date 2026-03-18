@@ -58,7 +58,6 @@ final class QuartzViewModel: ObservableObject {
         self.noteID = noteID
         loadState()
         setupAutoSave()
-        saveCurrentState()
     }
 
     private func setupAutoSave() {
