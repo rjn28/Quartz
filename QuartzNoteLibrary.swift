@@ -58,6 +58,10 @@ struct QuartzNote: Identifiable, Codable, Hashable {
         "\(title) (\(Self.menuDateFormatter.string(from: updatedAt)))"
     }
 
+    var hasContent: Bool {
+        !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || canvasData != nil
+    }
+
     private static let menuDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -83,7 +87,9 @@ final class QuartzNoteLibrary: ObservableObject {
 
     private init() {
         loadNotes()
+        removeEmptyNotesIfNeeded()
         migrateLegacyNotesIfNeeded()
+        removeEmptyNotesIfNeeded()
     }
 
     func makeNewRoute() -> EditorRoute {
@@ -111,6 +117,14 @@ final class QuartzNoteLibrary: ObservableObject {
         isPreviewMode: Bool,
         isSplitView: Bool
     ) {
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let existingCanvasData = notes.first(where: { $0.id == noteID })?.canvasData
+
+        if trimmedText.isEmpty && existingCanvasData == nil {
+            removeNote(noteID)
+            return
+        }
+
         updateNote(noteID) { note in
             note.text = text
             note.isDarkMode = isDarkMode
@@ -126,6 +140,14 @@ final class QuartzNoteLibrary: ObservableObject {
     }
 
     func saveCanvasData(_ data: Data?, for noteID: UUID) {
+        let existingText = notes.first(where: { $0.id == noteID })?.text ?? ""
+        let hasText = !existingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
+        if data == nil && !hasText {
+            removeNote(noteID)
+            return
+        }
+
         updateNote(noteID) { note in
             note.canvasData = data
         }
@@ -154,6 +176,15 @@ final class QuartzNoteLibrary: ObservableObject {
         persistNotes()
     }
 
+    private func removeNote(_ noteID: UUID) {
+        let previousCount = notes.count
+        notes.removeAll { $0.id == noteID }
+
+        if notes.count != previousCount {
+            persistNotes()
+        }
+    }
+
     private func loadNotes() {
         guard let data = UserDefaults.standard.data(forKey: notesKey) else { return }
 
@@ -171,6 +202,15 @@ final class QuartzNoteLibrary: ObservableObject {
             UserDefaults.standard.set(data, forKey: notesKey)
         } catch {
             print("Error saving notes: \(error)")
+        }
+    }
+
+    private func removeEmptyNotesIfNeeded() {
+        let previousCount = notes.count
+        notes.removeAll { !$0.hasContent }
+
+        if notes.count != previousCount {
+            persistNotes()
         }
     }
 
