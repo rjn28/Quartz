@@ -194,7 +194,7 @@ struct ContentView: View {
                 .frame(width: 1, height: 16)
 
             Button(action: {
-                openWindow(id: QuartzApp.editorWindowID)
+                openWindow(value: WindowSessionStore.shared.makeNewWindowID())
             }) {
                 Image(systemName: "plus.rectangle.on.rectangle")
                     .font(.system(size: 16, weight: .medium))

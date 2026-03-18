@@ -2,11 +2,11 @@ import SwiftUI
 
 @main
 struct QuartzApp: App {
-    static let editorWindowID = "editor-window"
+    @StateObject private var windowSessionStore = WindowSessionStore.shared
 
     var body: some Scene {
-        WindowGroup(id: Self.editorWindowID) {
-            EditorWindowView()
+        WindowGroup(for: UUID.self) { windowID in
+            EditorWindowView(sceneWindowID: windowID.wrappedValue)
                 .background(VisualEffectBlur(material: .sidebar, blendingMode: .behindWindow))
         }
         .windowStyle(.hiddenTitleBar)
@@ -18,10 +18,24 @@ struct QuartzApp: App {
 }
 
 private struct EditorWindowView: View {
-    @State private var windowID = UUID()
+    let sceneWindowID: UUID?
+    @Environment(\.openWindow) private var openWindow
+    @State private var resolvedWindowID: UUID
 
     var body: some View {
-        ContentView(windowID: windowID)
+        ContentView(windowID: resolvedWindowID)
+            .onAppear {
+                WindowSessionStore.shared.markWindowOpened(resolvedWindowID)
+                WindowSessionStore.shared.restoreRemainingWindows(with: openWindow)
+            }
+            .onDisappear {
+                WindowSessionStore.shared.markWindowClosed(resolvedWindowID)
+            }
+    }
+
+    init(sceneWindowID: UUID?) {
+        self.sceneWindowID = sceneWindowID
+        _resolvedWindowID = State(initialValue: sceneWindowID ?? WindowSessionStore.shared.consumeLaunchWindowID())
     }
 }
 
@@ -31,7 +45,7 @@ private struct QuartzCommands: Commands {
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
             Button("New Window") {
-                openWindow(id: QuartzApp.editorWindowID)
+                openWindow(value: WindowSessionStore.shared.makeNewWindowID())
             }
             .keyboardShortcut("n")
         }
