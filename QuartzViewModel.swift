@@ -1,6 +1,5 @@
 import SwiftUI
 import Combine
-import AppKit
 
 enum TextStatType: String, CaseIterable, Identifiable {
     case words = "Words"
@@ -39,19 +38,9 @@ final class QuartzViewModel: ObservableObject {
 
     @Published private(set) var cachedStatText: String = "0 words"
 
-    let windowID: UUID
+    let noteID: UUID
 
-    private let storagePrefix: String
     private var cancellables = Set<AnyCancellable>()
-
-    private enum StorageKey: String {
-        case text
-        case darkMode
-        case selectedStat
-        case fontSize
-        case previewMode
-        case splitView
-    }
 
     private static let exportDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -65,29 +54,18 @@ final class QuartzViewModel: ObservableObject {
         return formatter
     }()
 
-    init(windowID: UUID) {
-        self.windowID = windowID
-        self.storagePrefix = "Quartz.window.\(windowID.uuidString)"
+    init(noteID: UUID) {
+        self.noteID = noteID
         loadState()
         setupAutoSave()
-        WindowSessionStore.shared.updateText(text, for: windowID)
+        saveCurrentState()
     }
 
     private func setupAutoSave() {
         $text
             .dropFirst()
-            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
-            .removeDuplicates()
             .sink { [weak self] _ in
-                self?.saveText()
-            }
-            .store(in: &cancellables)
-
-        $text
-            .dropFirst()
-            .sink { [weak self] newText in
-                guard let self else { return }
-                WindowSessionStore.shared.updateText(newText, for: self.windowID)
+                self?.saveCurrentState()
             }
             .store(in: &cancellables)
 
@@ -101,16 +79,16 @@ final class QuartzViewModel: ObservableObject {
         $isDarkMode
             .dropFirst()
             .removeDuplicates()
-            .sink { [weak self] value in
-                self?.save(value, for: .darkMode)
+            .sink { [weak self] _ in
+                self?.saveCurrentState()
             }
             .store(in: &cancellables)
 
         $selectedStat
             .dropFirst()
             .removeDuplicates()
-            .sink { [weak self] value in
-                self?.save(value.rawValue, for: .selectedStat)
+            .sink { [weak self] _ in
+                self?.saveCurrentState()
                 self?.refreshStats()
             }
             .store(in: &cancellables)
@@ -118,34 +96,51 @@ final class QuartzViewModel: ObservableObject {
         $fontSize
             .dropFirst()
             .removeDuplicates()
-            .sink { [weak self] value in
-                self?.save(Double(value.rawValue), for: .fontSize)
+            .sink { [weak self] _ in
+                self?.saveCurrentState()
             }
             .store(in: &cancellables)
 
         $isPreviewMode
             .dropFirst()
             .removeDuplicates()
-            .sink { [weak self] value in
-                self?.save(value, for: .previewMode)
+            .sink { [weak self] _ in
+                self?.saveCurrentState()
             }
             .store(in: &cancellables)
 
         $isSplitView
             .dropFirst()
             .removeDuplicates()
-            .sink { [weak self] value in
-                self?.save(value, for: .splitView)
-            }
-            .store(in: &cancellables)
-
-        NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)
             .sink { [weak self] _ in
-                self?.persistNow()
+                self?.saveCurrentState()
             }
             .store(in: &cancellables)
 
         updateCachedStats(for: text)
+    }
+
+    private func loadState() {
+        let note = QuartzNoteLibrary.shared.noteSnapshot(for: noteID)
+
+        text = note.text
+        isDarkMode = note.isDarkMode
+        selectedStat = TextStatType(rawValue: note.selectedStatRawValue) ?? .words
+        fontSize = QuartzFontSize(rawValue: note.fontSizeRawValue) ?? .normal
+        isPreviewMode = note.isPreviewMode
+        isSplitView = note.isSplitView
+    }
+
+    private func saveCurrentState() {
+        QuartzNoteLibrary.shared.saveEditorState(
+            noteID: noteID,
+            text: text,
+            isDarkMode: isDarkMode,
+            selectedStat: selectedStat,
+            fontSize: fontSize,
+            isPreviewMode: isPreviewMode,
+            isSplitView: isSplitView
+        )
     }
 
     private func updateCachedStats(for text: String) {
@@ -171,59 +166,6 @@ final class QuartzViewModel: ObservableObject {
             let minutes = wordCount / 200
             return minutes < 1 ? "< 1 min read" : "\(minutes) min read"
         }
-    }
-
-    private func storageKey(_ key: StorageKey) -> String {
-        "\(storagePrefix).\(key.rawValue)"
-    }
-
-    private func loadState() {
-        let defaults = UserDefaults.standard
-
-        text = defaults.string(forKey: storageKey(.text)) ?? ""
-
-        if defaults.object(forKey: storageKey(.darkMode)) != nil {
-            isDarkMode = defaults.bool(forKey: storageKey(.darkMode))
-        }
-
-        if
-            let storedStat = defaults.string(forKey: storageKey(.selectedStat)),
-            let selectedStat = TextStatType(rawValue: storedStat)
-        {
-            self.selectedStat = selectedStat
-        }
-
-        let storedFontSize = defaults.double(forKey: storageKey(.fontSize))
-        if storedFontSize > 0, let fontSize = QuartzFontSize(rawValue: storedFontSize) {
-            self.fontSize = fontSize
-        }
-
-        if defaults.object(forKey: storageKey(.previewMode)) != nil {
-            isPreviewMode = defaults.bool(forKey: storageKey(.previewMode))
-        }
-
-        if defaults.object(forKey: storageKey(.splitView)) != nil {
-            isSplitView = defaults.bool(forKey: storageKey(.splitView))
-        }
-    }
-
-    private func save(_ value: Any, for key: StorageKey) {
-        UserDefaults.standard.set(value, forKey: storageKey(key))
-    }
-
-    private func saveText() {
-        save(text, for: .text)
-    }
-
-    @MainActor
-    private func persistNow() {
-        saveText()
-        save(isDarkMode, for: .darkMode)
-        save(selectedStat.rawValue, for: .selectedStat)
-        save(Double(fontSize.rawValue), for: .fontSize)
-        save(isPreviewMode, for: .previewMode)
-        save(isSplitView, for: .splitView)
-        WindowSessionStore.shared.updateText(text, for: windowID)
     }
 
     func toggleTheme() {

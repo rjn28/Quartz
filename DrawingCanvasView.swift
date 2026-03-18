@@ -3,16 +3,16 @@ import SwiftUI
 struct DrawingCanvasView: View {
     @Binding var isPresented: Bool
     let isDarkMode: Bool
-    let windowID: UUID
+    let noteID: UUID
 
     @StateObject private var viewModel: DrawingCanvasViewModel
     @State private var showClearConfirmation = false
 
-    init(isPresented: Binding<Bool>, isDarkMode: Bool, windowID: UUID) {
+    init(isPresented: Binding<Bool>, isDarkMode: Bool, noteID: UUID) {
         _isPresented = isPresented
         self.isDarkMode = isDarkMode
-        self.windowID = windowID
-        _viewModel = StateObject(wrappedValue: DrawingCanvasViewModel(windowID: windowID))
+        self.noteID = noteID
+        _viewModel = StateObject(wrappedValue: DrawingCanvasViewModel(noteID: noteID))
     }
     
     var body: some View {

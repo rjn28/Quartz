@@ -1,78 +1,64 @@
 import SwiftUI
-import AppKit
 
 @main
 struct QuartzApp: App {
-    @NSApplicationDelegateAdaptor(QuartzAppDelegate.self) private var appDelegate
-    @StateObject private var windowSessionStore = WindowSessionStore.shared
+    @StateObject private var noteLibrary = QuartzNoteLibrary.shared
 
     var body: some Scene {
-        WindowGroup(for: UUID.self) { windowID in
-            EditorWindowView(sceneWindowID: windowID.wrappedValue)
+        WindowGroup(for: EditorRoute.self) { route in
+            EditorWindowView(route: route.wrappedValue ?? noteLibrary.makeNewRoute())
                 .background(VisualEffectBlur(material: .sidebar, blendingMode: .behindWindow))
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
         .commands {
-            QuartzCommands()
+            QuartzCommands(noteLibrary: noteLibrary)
         }
     }
 }
 
-@MainActor
-final class QuartzAppDelegate: NSObject, NSApplicationDelegate {
-    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        WindowSessionStore.shared.beginTermination()
-        return .terminateNow
-    }
-
-    func applicationWillTerminate(_ notification: Notification) {
-        WindowSessionStore.shared.beginTermination()
-    }
-}
-
 private struct EditorWindowView: View {
-    let sceneWindowID: UUID?
-    @Environment(\.openWindow) private var openWindow
-    @State private var resolvedWindowID: UUID
+    let route: EditorRoute
 
     var body: some View {
-        ContentView(windowID: resolvedWindowID)
-            .onAppear {
-                WindowSessionStore.shared.markWindowOpened(resolvedWindowID)
-                WindowSessionStore.shared.restoreRemainingWindows(with: openWindow)
-            }
-            .onDisappear {
-                WindowSessionStore.shared.markWindowClosed(resolvedWindowID)
-            }
-    }
-
-    init(sceneWindowID: UUID?) {
-        self.sceneWindowID = sceneWindowID
-        _resolvedWindowID = State(initialValue: sceneWindowID ?? WindowSessionStore.shared.consumeLaunchWindowID())
+        ContentView(route: route)
     }
 }
 
 private struct QuartzCommands: Commands {
+    @ObservedObject var noteLibrary: QuartzNoteLibrary
     @Environment(\.openWindow) private var openWindow
 
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
             Button("New Window") {
-                openWindow(value: WindowSessionStore.shared.makeNewWindowID())
+                openWindow(value: noteLibrary.makeNewRoute())
             }
             .keyboardShortcut("n")
+        }
+
+        CommandGroup(after: .newItem) {
+            Menu("Saved Texts") {
+                if noteLibrary.savedNotes.isEmpty {
+                    Text("No saved texts")
+                } else {
+                    ForEach(noteLibrary.savedNotes) { note in
+                        Button(note.menuTitle) {
+                            openWindow(value: noteLibrary.makeRoute(for: note.id))
+                        }
+                    }
+                }
+            }
         }
 
         SidebarCommands()
     }
 }
 
-// Helper for window background translucency if needed at the window level
 struct VisualEffectBlur: NSViewRepresentable {
     var material: NSVisualEffectView.Material
     var blendingMode: NSVisualEffectView.BlendingMode
-    
+
     func makeNSView(context: Context) -> NSVisualEffectView {
         let visualEffectView = NSVisualEffectView()
         visualEffectView.material = material
@@ -80,7 +66,7 @@ struct VisualEffectBlur: NSViewRepresentable {
         visualEffectView.state = .active
         return visualEffectView
     }
-    
+
     func updateNSView(_ nsView: NSVisualEffectView, context: Context) {
         nsView.material = material
         nsView.blendingMode = blendingMode

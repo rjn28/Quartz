@@ -20,8 +20,8 @@ struct ContentView: View {
     // Throttle for mouse movement (optimization)
     @State private var lastMouseEventTime: Date = .distantPast
 
-    init(windowID: UUID) {
-        _viewModel = StateObject(wrappedValue: QuartzViewModel(windowID: windowID))
+    init(route: EditorRoute) {
+        _viewModel = StateObject(wrappedValue: QuartzViewModel(noteID: route.noteID))
     }
     
     var body: some View {
@@ -143,7 +143,7 @@ struct ContentView: View {
                 DrawingCanvasView(
                     isPresented: $showDrawingCanvas,
                     isDarkMode: viewModel.isDarkMode,
-                    windowID: viewModel.windowID
+                    noteID: viewModel.noteID
                 )
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(100)
@@ -194,7 +194,7 @@ struct ContentView: View {
                 .frame(width: 1, height: 16)
 
             Button(action: {
-                openWindow(value: WindowSessionStore.shared.makeNewWindowID())
+                openWindow(value: QuartzNoteLibrary.shared.makeNewRoute())
             }) {
                 Image(systemName: "plus.rectangle.on.rectangle")
                     .font(.system(size: 16, weight: .medium))
