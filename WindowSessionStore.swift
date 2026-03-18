@@ -93,6 +93,13 @@ final class WindowSessionStore: ObservableObject {
         persistRestorableWindowIDs()
     }
 
+    func beginTermination() {
+        guard !isTerminating else { return }
+
+        isTerminating = true
+        persistRestorableWindowIDs()
+    }
+
     private func ensureKnown(_ windowID: UUID) {
         if !orderedWindowIDs.contains(windowID) {
             orderedWindowIDs.append(windowID)
@@ -114,8 +121,7 @@ final class WindowSessionStore: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor [weak self] in
-                self?.isTerminating = true
-                self?.persistRestorableWindowIDs()
+                self?.beginTermination()
             }
         }
 
