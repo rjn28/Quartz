@@ -87,13 +87,10 @@ final class QuartzNoteLibrary: ObservableObject {
     }
 
     func makeNewRoute() -> EditorRoute {
-        let note = QuartzNote()
-        upsert(note, updateTimestamp: false)
-        return EditorRoute(windowID: UUID(), noteID: note.id)
+        EditorRoute(windowID: UUID(), noteID: UUID())
     }
 
     func makeRoute(for noteID: UUID) -> EditorRoute {
-        _ = noteSnapshot(for: noteID)
         return EditorRoute(windowID: UUID(), noteID: noteID)
     }
 
@@ -102,9 +99,7 @@ final class QuartzNoteLibrary: ObservableObject {
             return note
         }
 
-        let note = QuartzNote(id: noteID)
-        upsert(note, updateTimestamp: false)
-        return note
+        return QuartzNote(id: noteID)
     }
 
     func saveEditorState(
@@ -127,7 +122,7 @@ final class QuartzNoteLibrary: ObservableObject {
     }
 
     func canvasData(for noteID: UUID) -> Data? {
-        noteSnapshot(for: noteID).canvasData
+        notes.first(where: { $0.id == noteID })?.canvasData
     }
 
     func saveCanvasData(_ data: Data?, for noteID: UUID) {
