@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import AppKit
 
 // MARK: - Shape Types
 
@@ -131,6 +132,7 @@ struct DrawableShape: Identifiable, Codable {
 
 // MARK: - Drawing Canvas ViewModel
 
+@MainActor
 final class DrawingCanvasViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var shapes: [DrawableShape] = []
@@ -177,6 +179,12 @@ final class DrawingCanvasViewModel: ObservableObject {
         $shapes
             .dropFirst()
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.saveShapes()
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)
             .sink { [weak self] _ in
                 self?.saveShapes()
             }

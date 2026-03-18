@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import AppKit
 
 enum TextStatType: String, CaseIterable, Identifiable {
     case words = "Words"
@@ -27,6 +28,7 @@ enum QuartzFontSize: CGFloat, CaseIterable, Identifiable {
     }
 }
 
+@MainActor
 final class QuartzViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var isDarkMode: Bool = true
@@ -68,6 +70,7 @@ final class QuartzViewModel: ObservableObject {
         self.storagePrefix = "Quartz.window.\(windowID.uuidString)"
         loadState()
         setupAutoSave()
+        WindowSessionStore.shared.updateText(text, for: windowID)
     }
 
     private func setupAutoSave() {
@@ -77,6 +80,14 @@ final class QuartzViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.saveText()
+            }
+            .store(in: &cancellables)
+
+        $text
+            .dropFirst()
+            .sink { [weak self] newText in
+                guard let self else { return }
+                WindowSessionStore.shared.updateText(newText, for: self.windowID)
             }
             .store(in: &cancellables)
 
@@ -125,6 +136,12 @@ final class QuartzViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] value in
                 self?.save(value, for: .splitView)
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)
+            .sink { [weak self] _ in
+                self?.persistNow()
             }
             .store(in: &cancellables)
 
@@ -196,6 +213,17 @@ final class QuartzViewModel: ObservableObject {
 
     private func saveText() {
         save(text, for: .text)
+    }
+
+    @MainActor
+    private func persistNow() {
+        saveText()
+        save(isDarkMode, for: .darkMode)
+        save(selectedStat.rawValue, for: .selectedStat)
+        save(Double(fontSize.rawValue), for: .fontSize)
+        save(isPreviewMode, for: .previewMode)
+        save(isSplitView, for: .splitView)
+        WindowSessionStore.shared.updateText(text, for: windowID)
     }
 
     func toggleTheme() {
