@@ -3,9 +3,17 @@ import SwiftUI
 struct DrawingCanvasView: View {
     @Binding var isPresented: Bool
     let isDarkMode: Bool
-    
-    @StateObject private var viewModel = DrawingCanvasViewModel()
+    let windowID: UUID
+
+    @StateObject private var viewModel: DrawingCanvasViewModel
     @State private var showClearConfirmation = false
+
+    init(isPresented: Binding<Bool>, isDarkMode: Bool, windowID: UUID) {
+        _isPresented = isPresented
+        self.isDarkMode = isDarkMode
+        self.windowID = windowID
+        _viewModel = StateObject(wrappedValue: DrawingCanvasViewModel(windowID: windowID))
+    }
     
     var body: some View {
         ZStack {

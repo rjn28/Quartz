@@ -7,7 +7,7 @@ enum TextStatType: String, CaseIterable, Identifiable {
     case charactersNoSpaces = "Chars (no spaces)"
     case lines = "Lines"
     case readingTime = "Reading Time"
-    
+
     var id: String { rawValue }
 }
 
@@ -15,8 +15,9 @@ enum QuartzFontSize: CGFloat, CaseIterable, Identifiable {
     case normal = 18
     case large = 24
     case extraLarge = 32
-    
+
     var id: CGFloat { rawValue }
+
     var label: String {
         switch self {
         case .normal: return "Normal"
@@ -26,45 +27,50 @@ enum QuartzFontSize: CGFloat, CaseIterable, Identifiable {
     }
 }
 
-class QuartzViewModel: ObservableObject {
-    // MARK: - Published Properties
+final class QuartzViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var isDarkMode: Bool = true
     @Published var selectedStat: TextStatType = .words
     @Published var fontSize: QuartzFontSize = .normal
     @Published var isPreviewMode: Bool = false
     @Published var isSplitView: Bool = false
-    
-    // MARK: - Private Properties
-    private let textKey = "Quartz_text_persistence"
-    private var cancellables = Set<AnyCancellable>()
-    
-    // Cached statistics (updated with debounce)
+
     @Published private(set) var cachedStatText: String = "0 words"
-    
-    // Static DateFormatter (expensive to create, reuse it)
+
+    let windowID: UUID
+
+    private let storagePrefix: String
+    private var cancellables = Set<AnyCancellable>()
+
+    private enum StorageKey: String {
+        case text
+        case darkMode
+        case selectedStat
+        case fontSize
+        case previewMode
+        case splitView
+    }
+
     private static let exportDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH-mm-ss"
         return formatter
     }()
-    
+
     private static let tempFileDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH-mm"
         return formatter
     }()
-    
-    // MARK: - Initialization
-    init() {
-        loadText()
+
+    init(windowID: UUID) {
+        self.windowID = windowID
+        self.storagePrefix = "Quartz.window.\(windowID.uuidString)"
+        loadState()
         setupAutoSave()
     }
-    
-    // MARK: - Logic
-    
+
     private func setupAutoSave() {
-        // Debounced save
         $text
             .dropFirst()
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
@@ -73,23 +79,62 @@ class QuartzViewModel: ObservableObject {
                 self?.saveText()
             }
             .store(in: &cancellables)
-        
-        // Debounced stats update (same timing)
+
         $text
             .debounce(for: .seconds(0.3), scheduler: RunLoop.main)
             .sink { [weak self] newText in
                 self?.updateCachedStats(for: newText)
             }
             .store(in: &cancellables)
-        
-        // Initial stats
+
+        $isDarkMode
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.save(value, for: .darkMode)
+            }
+            .store(in: &cancellables)
+
+        $selectedStat
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.save(value.rawValue, for: .selectedStat)
+                self?.refreshStats()
+            }
+            .store(in: &cancellables)
+
+        $fontSize
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.save(Double(value.rawValue), for: .fontSize)
+            }
+            .store(in: &cancellables)
+
+        $isPreviewMode
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.save(value, for: .previewMode)
+            }
+            .store(in: &cancellables)
+
+        $isSplitView
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.save(value, for: .splitView)
+            }
+            .store(in: &cancellables)
+
         updateCachedStats(for: text)
     }
-    
+
     private func updateCachedStats(for text: String) {
         cachedStatText = calculateStatText(for: text)
     }
-    
+
     private func calculateStatText(for text: String) -> String {
         switch selectedStat {
         case .words:
@@ -107,58 +152,79 @@ class QuartzViewModel: ObservableObject {
         case .readingTime:
             let wordCount = text.split { $0.isWhitespace || $0.isNewline }.count
             let minutes = wordCount / 200
-            if minutes < 1 {
-                return "< 1 min read"
-            } else {
-                return "\(minutes) min read"
-            }
+            return minutes < 1 ? "< 1 min read" : "\(minutes) min read"
         }
     }
-    
-    /// Loads the saved text from UserDefaults
-    private func loadText() {
-        if let savedText = UserDefaults.standard.string(forKey: textKey) {
-            self.text = savedText
+
+    private func storageKey(_ key: StorageKey) -> String {
+        "\(storagePrefix).\(key.rawValue)"
+    }
+
+    private func loadState() {
+        let defaults = UserDefaults.standard
+
+        text = defaults.string(forKey: storageKey(.text)) ?? ""
+
+        if defaults.object(forKey: storageKey(.darkMode)) != nil {
+            isDarkMode = defaults.bool(forKey: storageKey(.darkMode))
+        }
+
+        if
+            let storedStat = defaults.string(forKey: storageKey(.selectedStat)),
+            let selectedStat = TextStatType(rawValue: storedStat)
+        {
+            self.selectedStat = selectedStat
+        }
+
+        let storedFontSize = defaults.double(forKey: storageKey(.fontSize))
+        if storedFontSize > 0, let fontSize = QuartzFontSize(rawValue: storedFontSize) {
+            self.fontSize = fontSize
+        }
+
+        if defaults.object(forKey: storageKey(.previewMode)) != nil {
+            isPreviewMode = defaults.bool(forKey: storageKey(.previewMode))
+        }
+
+        if defaults.object(forKey: storageKey(.splitView)) != nil {
+            isSplitView = defaults.bool(forKey: storageKey(.splitView))
         }
     }
-    
-    /// Saves the current text to UserDefaults
+
+    private func save(_ value: Any, for key: StorageKey) {
+        UserDefaults.standard.set(value, forKey: storageKey(key))
+    }
+
     private func saveText() {
-        UserDefaults.standard.set(text, forKey: textKey)
+        save(text, for: .text)
     }
-    
-    /// Toggles the visual theme
+
     func toggleTheme() {
         withAnimation(.easeInOut(duration: 0.3)) {
             isDarkMode.toggle()
         }
     }
-    
-    /// Clears the Quartz content
+
     func clearBoard() {
         withAnimation(.easeOut(duration: 0.2)) {
             text = ""
         }
     }
-    
-    /// Returns the formatted string for the selected statistic (uses cached value)
+
     var statText: String {
         cachedStatText
     }
-    
-    /// Force refresh stats when user changes stat type
+
     func refreshStats() {
         updateCachedStats(for: text)
     }
-    
-    /// Creates a temporary file for drag and drop
+
     func createTempFile() -> URL {
         let dateString = Self.tempFileDateFormatter.string(from: Date())
         let fileName = "Note \(dateString).txt"
-        
+
         let tempDir = FileManager.default.temporaryDirectory
         let fileURL = tempDir.appendingPathComponent(fileName)
-        
+
         do {
             try text.write(to: fileURL, atomically: true, encoding: .utf8)
             return fileURL
@@ -167,18 +233,18 @@ class QuartzViewModel: ObservableObject {
             return fileURL
         }
     }
-    /// Exports the current text to a file on the Desktop
+
     func exportToDesktop() {
         let dateString = Self.exportDateFormatter.string(from: Date())
         let fileName = "Quartz Note \(dateString).txt"
-        
+
         guard let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first else {
             print("Could not find Desktop directory")
             return
         }
-        
+
         let fileURL = desktopURL.appendingPathComponent(fileName)
-        
+
         do {
             try text.write(to: fileURL, atomically: true, encoding: .utf8)
         } catch {

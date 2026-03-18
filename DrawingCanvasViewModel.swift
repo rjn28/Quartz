@@ -131,7 +131,7 @@ struct DrawableShape: Identifiable, Codable {
 
 // MARK: - Drawing Canvas ViewModel
 
-class DrawingCanvasViewModel: ObservableObject {
+final class DrawingCanvasViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var shapes: [DrawableShape] = []
     @Published var currentShape: DrawableShape?
@@ -143,9 +143,11 @@ class DrawingCanvasViewModel: ObservableObject {
     @Published var isEditingText: Bool = false
     @Published var textInputPosition: CGPoint = .zero
     @Published var currentText: String = ""
+
+    let windowID: UUID
     
     // MARK: - Private Properties
-    private let shapesKey = "Quartz_canvas_shapes"
+    private let shapesKey: String
     private var cancellables = Set<AnyCancellable>()
     
     // Available colors for quick selection
@@ -162,7 +164,9 @@ class DrawingCanvasViewModel: ObservableObject {
     
     // MARK: - Initialization
     
-    init() {
+    init(windowID: UUID) {
+        self.windowID = windowID
+        self.shapesKey = "Quartz.window.\(windowID.uuidString).canvas.shapes"
         loadShapes()
         setupAutoSave()
     }

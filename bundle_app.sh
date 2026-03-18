@@ -3,7 +3,8 @@
 # --- CONFIGURATION ---
 APP_NAME="Quartz"
 EXECUTABLE_NAME="QuartzApp"
-DMG_NAME="Quartz_Installer.dmg"
+OUTPUT_DIR="BuildArtifacts"
+DMG_NAME="$OUTPUT_DIR/Quartz_Installer.dmg"
 
 # --- 1. NETTOYAGE ---
 echo "🧹 Nettoyage..."
@@ -12,6 +13,8 @@ rm -rf "$APP_NAME.app"
 rm -rf "TempIcon.iconset"
 rm -f "AppIcon.icns"
 rm -f "$DMG_NAME"
+rm -f "Quartz_Installer.dmg"
+mkdir -p "$OUTPUT_DIR"
 
 # --- 2. COMPILATION DU CODE ---
 echo "🔨 Compilation du code..."

@@ -2,7 +2,8 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ContentView: View {
-    @StateObject private var viewModel = QuartzViewModel()
+    @Environment(\.openWindow) private var openWindow
+    @StateObject private var viewModel: QuartzViewModel
     @FocusState private var isFocused: Bool
     @State private var showClearConfirmation = false
     @State private var showDrawingCanvas = false
@@ -18,6 +19,10 @@ struct ContentView: View {
     
     // Throttle for mouse movement (optimization)
     @State private var lastMouseEventTime: Date = .distantPast
+
+    init(windowID: UUID) {
+        _viewModel = StateObject(wrappedValue: QuartzViewModel(windowID: windowID))
+    }
     
     var body: some View {
         ZStack {
@@ -135,7 +140,11 @@ struct ContentView: View {
             
             // MARK: - Drawing Canvas Overlay
             if showDrawingCanvas {
-                DrawingCanvasView(isPresented: $showDrawingCanvas, isDarkMode: viewModel.isDarkMode)
+                DrawingCanvasView(
+                    isPresented: $showDrawingCanvas,
+                    isDarkMode: viewModel.isDarkMode,
+                    windowID: viewModel.windowID
+                )
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(100)
             }
@@ -179,6 +188,20 @@ struct ContentView: View {
             }
             .buttonStyle(.plain)
             .help("Toggle Theme")
+
+            Rectangle()
+                .fill(Color.primary.opacity(0.2))
+                .frame(width: 1, height: 16)
+
+            Button(action: {
+                openWindow(id: QuartzApp.editorWindowID)
+            }) {
+                Image(systemName: "plus.rectangle.on.rectangle")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.primary)
+            }
+            .buttonStyle(.plain)
+            .help("New Window")
             
             Rectangle()
                 .fill(Color.primary.opacity(0.2))

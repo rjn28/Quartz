@@ -17,12 +17,14 @@ let package = Package(
             dependencies: [],
             path: ".",
             exclude: [
-                "bundle_app.sh", 
+                "bundle_app.sh",
+                "BuildArtifacts",
                 "docs",
                 "Resources",
                 ".gitignore",
-                "README.md"
-                // J'ai retiré TOUTES les lignes .dmg ici
+                "README.md",
+                "LICENSE",
+                "logoquartz.png"
             ],
             resources: [
                 .process("Resources")
