@@ -1,7 +1,9 @@
 import SwiftUI
+import AppKit
 
 @main
 struct QuartzApp: App {
+    @NSApplicationDelegateAdaptor(QuartzAppDelegate.self) private var appDelegate
     @StateObject private var windowSessionStore = WindowSessionStore.shared
 
     var body: some Scene {
@@ -14,6 +16,18 @@ struct QuartzApp: App {
         .commands {
             QuartzCommands()
         }
+    }
+}
+
+@MainActor
+final class QuartzAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        WindowSessionStore.shared.beginTermination()
+        return .terminateNow
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        WindowSessionStore.shared.beginTermination()
     }
 }
 
