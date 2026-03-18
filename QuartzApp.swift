@@ -2,17 +2,41 @@ import SwiftUI
 
 @main
 struct QuartzApp: App {
+    static let editorWindowID = "editor-window"
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        WindowGroup(id: Self.editorWindowID) {
+            EditorWindowView()
                 .background(VisualEffectBlur(material: .sidebar, blendingMode: .behindWindow))
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
         .commands {
-            // Minimal commands, removing unnecessary default menus if needed
-            SidebarCommands() // Removes sidebar toggle if not needed
+            QuartzCommands()
         }
+    }
+}
+
+private struct EditorWindowView: View {
+    @State private var windowID = UUID()
+
+    var body: some View {
+        ContentView(windowID: windowID)
+    }
+}
+
+private struct QuartzCommands: Commands {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("New Window") {
+                openWindow(id: QuartzApp.editorWindowID)
+            }
+            .keyboardShortcut("n")
+        }
+
+        SidebarCommands()
     }
 }
 
