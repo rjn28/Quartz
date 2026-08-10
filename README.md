@@ -1,91 +1,101 @@
 <div align="center">
-  <img src="docs/logoquartz-min.png" width="128" height="128" style="border-radius: 22%; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+  <strong>English</strong> · <a href="README.fr.md">Français</a>
 
-  # 💎 Quartz
-  **The purest thinking space for macOS.**
+  <img src="Sources/Quartz/Resources/Assets.xcassets/AppIcon.appiconset/128.png" width="128" height="128" alt="Quartz app icon">
 
-  <p>
-    <a href="https://github.com/rjn28/Quartz/releases/latest">
-      <img src="https://img.shields.io/badge/Download-macOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download for macOS">
-    </a>
-    <img src="https://img.shields.io/badge/SwiftUI-Native-blue?style=for-the-badge&logo=swift&logoColor=white" alt="Built with SwiftUI">
-    <img src="https://img.shields.io/badge/License-Non--Commercial-red?style=for-the-badge" alt="License Non-Commercial">
-    <a href="https://www.linkedin.com/in/roch-junior-nicolas-le-dev/">
-  <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Connect on LinkedIn">
-</a>
-  </p>
+  # Quartz
 
-  <p>
-    <i>No folders. No cloud. Just you and your thoughts.</i>
-  </p>
+  **A private, local-first writing canvas for macOS.**
+
+  [![CI](https://github.com/rjn28/Quartz/actions/workflows/ci.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/ci.yml)
+  [![CodeQL](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml)
+  ![macOS 14+ Apple Silicon](https://img.shields.io/badge/macOS-14%2B%20Apple%20Silicon-black?logo=apple)
+  ![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)
+  ![Source available](https://img.shields.io/badge/license-source--available-red)
 </div>
 
----
+Quartz is a native SwiftUI note editor designed to keep writing fast and distraction-free. Notes and drawings stay on the Mac in local user preferences; Quartz has no account, cloud sync, analytics, or network dependency.
 
-## Overview
+## Features
 
-Quartz is a native macOS application designed to eliminate friction between your brain and the screen. It acts as an ephemeral whiteboard—always ready, beautifully simple.
+- Focused text editor with controls that recede while you type.
+- Markdown preview and a resizable editor/preview split view.
+- Per-note drawing canvas with shapes, text, colors, undo, and redo.
+- Persistent saved-note history and independent macOS windows.
+- Word, character, line, and reading-time statistics.
+- Light and dark appearances, configurable type size, keyboard commands, and VoiceOver labels.
+- Click or drag exports in TXT and paginated PDF formats.
 
-### Key Features
-* **🎨 Glassmorphism UI:** A modern, translucent interface that blends into your macOS Tahoe desktop.
-* **🧘 Zen Mode:** The interface fades away while you type. Focus entirely on your words.
-* **🚀 Magic Drag Export:** Finished writing? Simply drag the `TXT` floating button onto your desktop or into an email to instantly create a file.
-* **📊 Smart Stats:** Click the counter to toggle between Word Count, Character Count, and Reading Time.
-* **⚡️ Native Performance:** Built with Swift and SwiftUI.
-
----
-
-## 📸 Screenshot
+## Screenshot
 
 <div align="center">
-  <img src="docs/screenshot_ui.png" width="100%" alt="Glass Interface" style="border-radius: 8px;">
+  <img src="docs/screenshot_ui.png" width="100%" alt="Quartz editor window">
 </div>
 
----
+## Requirements
 
-## 📦 Installation
+- macOS 14 Sonoma or later.
+- Xcode Command Line Tools with Swift 6 for development.
+- Apple Silicon Mac. Intel Macs are not supported.
 
-Quartz is an **Open Source** project distributed outside the Mac App Store.
-Because I use a Free Apple Developer Account, the app is signed Ad-Hoc but **not notarized**.
+## Install
 
-**macOS will likely flag it for security. This is normal.**
+Published builds are available on the [Releases page](https://github.com/rjn28/Quartz/releases). Releases before `v1.3.0` are legacy arm64, ad hoc-signed builds that were not notarized; verify their provenance before running them. The new release workflow refuses to publish unless the app is Developer ID-signed, notarized, stapled, checksummed, and attested.
 
-### How to install:
+Until a notarized `v1.3.0` or newer release is available, building from source is the recommended path.
 
-1.  Download the latest **`.dmg`** file from the [Releases Page](https://github.com/rjn28/Quartz/releases/latest).
-2.  Drag **Quartz** into your `Applications` folder.
-3.  Launch the app.
+For future trusted releases, download the `.dmg` and matching `.sha256`, then verify both checksum and GitHub provenance before opening the installer:
 
-### ⚠️ How to bypass the Security Warning
+```bash
+shasum -a 256 -c Quartz-X.Y.Z.dmg.sha256
+gh attestation verify Quartz-X.Y.Z.dmg --repo rjn28/Quartz
+```
 
-If you see a message saying *"Quartz cannot be opened because the developer cannot be verified"* or *"Quartz is damaged"*:
+## Build from source
 
-**Method 1 (Quickest):**
-1.  **Right-Click** (or Control+Click) on the app icon.
-2.  Select **Open**.
-3.  Click **Open** in the dialog box.
+```bash
+git clone https://github.com/rjn28/Quartz.git
+cd Quartz
+swift build
+swift run QuartzApp
+```
 
-**Method 2 (System Settings - Recommended):**
-If Method 1 does not work:
-1.  Click **Done** or **OK** on the error message.
-2.  Open **System Settings**.
-3.  Go to **Privacy & Security**.
-4.  Scroll down to the **Security** section.
-5.  You will see a message: *"Quartz was blocked from use..."*. Click **Open Anyway**.
-6.  Enter your password/TouchID to confirm.
+Run the complete local validation suite:
 
----
+```bash
+./scripts/check.sh
+```
 
-## 👨‍💻 Tech Stack
+Create an Apple Silicon local DMG:
 
-* **Language:** Swift 5
-* **Framework:** SwiftUI
-* **Architecture:** MVVM
-* **System Integration:** `NSItemProvider`, `FileManager`.
+```bash
+./bundle_app.sh
+```
 
----
+The DMG is written to `BuildArtifacts/`. Without `CODE_SIGN_IDENTITY`, local packaging uses an ad hoc signature for testing only and is not suitable for public distribution. See [the release guide](docs/RELEASING.md) for Developer ID signing and notarization.
 
-<div align="center">
-  Made with ❤️ by <a href="https://github.com/rjn28">Roch Junior NICOLAS</a>.
-  <a href="https://www.linkedin.com/in/roch-junior-nicolas-le-dev/">Connect on LinkedIn 👔</a>
-</div>
+## Data and privacy
+
+Quartz stores note metadata, text, and encoded canvas data in the current macOS user's `UserDefaults` domain for `com.rjn28.Quartz`. Exports are created only when requested. No content leaves the Mac through Quartz.
+
+Before testing migrations or unreleased builds with important notes, back up the app's preferences. The project health report tracks the planned move toward independently stored, atomic note records.
+
+## Project documentation
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Project audit and improvement tracker](docs/PROJECT_AUDIT.md)
+- [Roadmap](ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+- [Release process](docs/RELEASING.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+
+## Contributing
+
+Bug reports and focused pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before starting, and report security issues privately as described in [SECURITY.md](SECURITY.md).
+
+## License
+
+Quartz is intentionally **source-available**, not OSI open source: the custom [LICENSE](LICENSE) permits non-commercial use and modification while prohibiting commercial use and app-store distribution. This non-commercial policy is a confirmed maintainer decision tracked in the [project audit](docs/PROJECT_AUDIT.md).
+
+Maintained by [Roch Junior Nicolas](https://github.com/rjn28).

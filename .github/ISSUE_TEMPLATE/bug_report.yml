@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible Quartz defect.
+title: "[Bug]: "
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Quartz. Remove private note content from logs and screenshots. Report vulnerabilities through the private security channel instead.
+  - type: input
+    id: version
+    attributes:
+      label: Quartz version
+      description: Release tag or commit SHA.
+      placeholder: v1.3.0 or 0123abc
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS and Mac
+      description: Include the macOS version and Apple Silicon model.
+      placeholder: macOS 15.6, Apple M2
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open…
+        2. Enter…
+        3. Observe…
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Sanitized diagnostics
+      description: Add relevant logs or screenshots without private note content.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and pull requests.
+          required: true
+        - label: This is not an undisclosed security vulnerability.
+          required: true
