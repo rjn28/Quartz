@@ -1,18 +1,24 @@
-<div align="center">
-  <strong>English</strong> · <a href="README.fr.md">Français</a>
+<p align="center">
+  <img src="Sources/Quartz/Resources/Assets.xcassets/AppIcon.appiconset/128.png" width="96" height="96" alt="Quartz app icon">
+</p>
 
-  <img src="Sources/Quartz/Resources/Assets.xcassets/AppIcon.appiconset/128.png" width="128" height="128" alt="Quartz app icon">
+<h1 align="center">Quartz</h1>
 
-  # Quartz
+<p align="center"><strong>A private, local-first writing canvas for macOS.</strong></p>
 
-  **A private, local-first writing canvas for macOS.**
+<p align="center">
+  <strong>English</strong>
+  <span aria-hidden="true"> · </span>
+  <a href="README.fr.md">Français</a>
+</p>
 
-  [![CI](https://github.com/rjn28/Quartz/actions/workflows/ci.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/ci.yml)
-  [![CodeQL](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml)
-  ![macOS 14+ Apple Silicon](https://img.shields.io/badge/macOS-14%2B%20Apple%20Silicon-black?logo=apple)
-  ![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)
-  [![Apache License 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
-</div>
+<p align="center">
+  <a href="https://github.com/rjn28/Quartz/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/rjn28/Quartz/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/rjn28/Quartz/actions/workflows/codeql.yml"><img alt="CodeQL status" src="https://github.com/rjn28/Quartz/actions/workflows/codeql.yml/badge.svg"></a>
+  <img alt="macOS 14 or later on Apple Silicon" src="https://img.shields.io/badge/macOS-14%2B%20Apple%20Silicon-black?logo=apple">
+  <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&amp;logoColor=white">
+  <a href="LICENSE"><img alt="Apache License 2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
+</p>
 
 Quartz is a native SwiftUI note editor designed to keep writing fast and distraction-free. Notes and drawings stay on the Mac in local user preferences; Quartz has no account, cloud sync, analytics, or network dependency.
 
