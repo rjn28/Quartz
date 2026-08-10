@@ -46,7 +46,7 @@ Les décisions propriétaire sont désormais enregistrées : licence non commerc
 | CI/sécurité | aucune Action, protections off | CI + CodeQL verts, checks requis, scans et tags protégés | surveiller alertes et maintenir les SHA Actions |
 | Documentation | obsolète/incomplète | README et corpus mainteneur complets | mise à jour à chaque changement public |
 | Licence | custom non commerciale, dite open source | politique non commerciale confirmée et terminologie corrigée | revue juridique du texte custom |
-| Git | `.build` suivi, historique ~80 Mio distant | croissance stoppée dans le tip | retirer `.build` en préservant la chronologie |
+| Git | `.build` suivi, historique ~80 Mio distant | `.build` retiré de tout l'historique, chronologie conservée | annoncer les nouveaux hashes et garder la sauvegarde hors remote |
 
 ## 4. Baseline vérifiée
 
@@ -86,7 +86,7 @@ Les décisions propriétaire sont désormais enregistrées : licence non commerc
 | P0-01 | Licence non commerciale incompatible avec l'étiquette « open source » | attentes juridiques et communautaires trompeuses | politique non commerciale conservée, README corrigé en « source-available » | Décidé ; revue juridique conseillée |
 | P0-02 | Releases publiques ad hoc/non notarizées | rejet Gatekeeper et faible confiance binaire | workflow Developer ID + hardened runtime + notary + staple + checksum + attestation | Implémenté ; compte Apple prévu à court terme |
 | P0-03 | Version `1.0 (1)` dans toutes les releases | mises à jour et diagnostic impossibles | `VERSION`, injection plist et build number monotone | Implémenté |
-| P0-04 | Historique Git dominé par `.build` | clones lourds, chemins machine exposés | retrait du tip ; réécriture autorisée avec sauvegarde et conservation des métadonnées | En cours |
+| P0-04 | Historique Git dominé par `.build` | clones lourds, chemins machine exposés | bundle complet vérifié puis filtre ciblé avec conservation des commits et métadonnées | Terminé |
 | P0-05 | Aucun garde-fou GitHub | régressions directes sur `main` | CI/CodeQL requis, historique linéaire, force-push/suppression bloqués, tags `v*` immuables | Terminé |
 
 ### P1 — données et correctness
@@ -192,6 +192,15 @@ Les décisions propriétaire sont désormais enregistrées : licence non commerc
 - `main` protégé par `Validate` et `Analyze Swift`, branche à jour et conversations résolues ; force-push et suppression interdits.
 - Ruleset actif `Protect release tags` : création de nouveaux tags `v*` autorisée, modification et suppression interdites.
 
+### 6.8 Hygiène de l'historique Git
+
+- Bundle complet de récupération créé et vérifié dans `.git/quartz-before-filter-20260810.bundle` ; il n'est jamais poussé.
+- `git-filter-repo` limité au chemin `.build/`, avec conservation explicite des commits devenus vides et de la topologie.
+- Les 25 commits de `main`, les 28 commits de la branche de modernisation, les auteurs, dates, messages et trois tags sont conservés.
+- Le premier commit reste daté du 3 décembre 2025 avec son auteur et son message d'origine.
+- Les 3 346 objets nommés sous `.build/` passent à zéro ; le pack Git utile local passe à environ 9,51 Mio hors bundle de sauvegarde.
+- Les hashes sont nécessairement recalculés. Tout clone existant doit être re-cloné ou réaligné explicitement après publication de l'historique filtré.
+
 ## 7. Stratégie de tests
 
 La suite initiale protège les comportements qui exposaient le plus de données ou de confiance :
@@ -233,6 +242,7 @@ Matrice à maintenir à chaque changement :
 | Plist | `plutil -lint` | Réussi |
 | Signature locale | `codesign --verify --deep --strict` | Réussi, ad hoc attendue |
 | DMG | `hdiutil verify` | Réussi |
+| Nettoyage historique | `git filter-repo` + contrôles avant/après | Réussi : commits/tags/dates conservés, `.build` = 0 |
 | Whitespace | `git diff --check` | Réussi |
 | YAML workflows | parse YAML local | Réussi |
 | PDF visuel | `pdftoppm` + inspection indépendante | Réussi : 7 pages A4, lignes 1–180 continues, aucun glyphe tronqué |
@@ -245,7 +255,7 @@ Matrice à maintenir à chaque changement :
 ### Bloquants avant release `v1.3.0`
 
 - [x] Conserver la licence non commerciale source-available ; faire relire son texte custom avant distribution plus large.
-- [ ] Relire/merger la PR avec CI et CodeQL verts.
+- [x] Relire/merger la PR avec CI et CodeQL verts.
 - [ ] Configurer l'environnement GitHub `release` et les secrets Developer ID.
 - [ ] Créer une clé de signature Git pour les tags et documenter sa garde.
 - [x] Activer les protections `main` et tags à partir des noms de checks observés.
@@ -265,7 +275,7 @@ Matrice à maintenir à chaque changement :
 
 ### P2 maintenance dépôt
 
-- [ ] Exécuter le nettoyage historique `git-filter-repo` avec sauvegarde locale, sans perdre auteurs, dates, messages ni ancienneté.
+- [x] Exécuter le nettoyage historique `git-filter-repo` avec sauvegarde locale, sans perdre auteurs, dates, messages ni ancienneté.
 - [ ] Publier un canal privé dédié aux signalements de conduite et l'ajouter à `MAINTAINERS.md`/`CODE_OF_CONDUCT.md`.
 - [ ] Ajouter une social preview optimisée sur GitHub.
 - [x] Conserver la documentation technique en anglais et proposer un sélecteur README EN/FR sur GitHub.
