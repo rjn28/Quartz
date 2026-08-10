@@ -84,6 +84,7 @@ Before testing migrations or unreleased builds with important notes, back up the
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Project audit and improvement tracker](docs/PROJECT_AUDIT.md)
+- [Manual test and release-acceptance tracker](docs/TEST_TRACKER.md)
 - [Roadmap](ROADMAP.md)
 - [Changelog](CHANGELOG.md)
 - [Release process](docs/RELEASING.md)

@@ -2,8 +2,7 @@
 
 > Document vivant de pilotage technique et communautaire.
 > Audit initial : 10 août 2026.
-> Branche de modernisation : `codex/modernize-quartz`.
-> Pull request de modernisation : [#1](https://github.com/rjn28/Quartz/pull/1).
+> Modernisation fusionnée sur `main` via la pull request [#2](https://github.com/rjn28/Quartz/pull/2).
 > Mainteneur : `@rjn28`.
 
 ## 1. Objet du document
@@ -203,6 +202,8 @@ Les décisions propriétaire sont désormais enregistrées : licence non commerc
 
 ## 7. Stratégie de tests
 
+Le suivi durable des validations manuelles et de l'acceptation mainteneur vit dans [`docs/TEST_TRACKER.md`](TEST_TRACKER.md). Les tests manuels y restent explicitement `NOT RUN` tant que le mainteneur n'a pas communiqué son propre résultat ; ils sont distincts des validations automatisées et des contrôles assistés réalisés pendant l'audit.
+
 La suite initiale protège les comportements qui exposaient le plus de données ou de confiance :
 
 - statistiques et invariants editor mode ;
@@ -246,7 +247,8 @@ Matrice à maintenir à chaque changement :
 | Whitespace | `git diff --check` | Réussi |
 | YAML workflows | parse YAML local | Réussi |
 | PDF visuel | `pdftoppm` + inspection indépendante | Réussi : 7 pages A4, lignes 1–180 continues, aucun glyphe tronqué |
-| UI smoke test | lancement + contrôle accessibilité | Réussi : editor/preview/split, canvas, undo/redo, raccourcis et labels AX |
+| UI smoke test assisté | lancement + contrôle accessibilité | Réussi pendant l'audit : editor/preview/split, canvas, undo/redo, raccourcis et labels AX |
+| Acceptation manuelle mainteneur | [`docs/TEST_TRACKER.md`](TEST_TRACKER.md) | Non commencée |
 | CI distante | [run `31347600641`](https://github.com/rjn28/Quartz/actions/runs/31347600641) | Réussi (`Validate`, 1 min 28) |
 | CodeQL distant | [run `31347600613`](https://github.com/rjn28/Quartz/actions/runs/31347600613) | Réussi (`Analyze Swift`, 14 min 10) |
 

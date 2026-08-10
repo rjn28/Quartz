@@ -84,6 +84,7 @@ Avant de tester une migration ou une version non publiée avec des notes importa
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Audit et suivi des améliorations](docs/PROJECT_AUDIT.md)
+- [Suivi des tests manuels et de l’acceptation de release](docs/TEST_TRACKER.md)
 - [Feuille de route](ROADMAP.md)
 - [Historique des changements](CHANGELOG.md)
 - [Processus de release](docs/RELEASING.md)
