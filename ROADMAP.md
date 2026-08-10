@@ -5,7 +5,7 @@ The roadmap is intentionally short. Priorities can change after user feedback or
 ## Now — release readiness
 
 - Review and merge the modernization pull request with green CI and CodeQL checks.
-- Keep the non-commercial source-available license and have its custom wording legally reviewed before broader distribution.
+- Keep Apache-2.0 licensing, attribution, and repository metadata accurate.
 - Configure Apple Developer ID credentials and GitHub's protected `release` environment.
 - Publish a signed, notarized, checksummed, and attested Apple Silicon `v1.3.0` release.
 - Keep the existing `main` checks and immutable release-tag rules enforced.
@@ -29,5 +29,5 @@ The roadmap is intentionally short. Priorities can change after user feedback or
 ## Explicit non-goals for now
 
 - Accounts, analytics, advertising, or required network access.
-- App Store distribution while the current license prohibits it.
+- Mac App Store distribution; the current release strategy remains direct Developer ID distribution with notarization.
 - Large third-party UI or persistence frameworks without a demonstrated need.

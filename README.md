@@ -11,7 +11,7 @@
   [![CodeQL](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml)
   ![macOS 14+ Apple Silicon](https://img.shields.io/badge/macOS-14%2B%20Apple%20Silicon-black?logo=apple)
   ![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)
-  ![Source available](https://img.shields.io/badge/license-source--available-red)
+  [![Apache License 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 </div>
 
 Quartz is a native SwiftUI note editor designed to keep writing fast and distraction-free. Notes and drawings stay on the Mac in local user preferences; Quartz has no account, cloud sync, analytics, or network dependency.
@@ -97,6 +97,6 @@ Bug reports and focused pull requests are welcome. Read [CONTRIBUTING.md](CONTRI
 
 ## License
 
-Quartz is intentionally **source-available**, not OSI open source: the custom [LICENSE](LICENSE) permits non-commercial use and modification while prohibiting commercial use and app-store distribution. This non-commercial policy is a confirmed maintainer decision tracked in the [project audit](docs/PROJECT_AUDIT.md).
+Quartz is open source under the OSI-approved [Apache License 2.0](LICENSE) (`Apache-2.0`). You may use, modify, distribute, and use Quartz commercially under the license terms. The licensing decision and the project’s previous non-commercial policy remain documented in the [project audit](docs/PROJECT_AUDIT.md).
 
 Maintained by [Roch Junior Nicolas](https://github.com/rjn28).

@@ -28,7 +28,7 @@ Quartz partait d'une application SwiftUI compacte et fonctionnelle, sans dépend
 
 La branche de modernisation transforme le projet en base Swift 6 testable et maintenable : structure SwiftPM standard, 28 tests initiaux, migrations idempotentes, exports sûrs, interface découpée et accessible, packaging Apple Silicon validé, CI/CodeQL/release fail-closed, documentation et gouvernance minimales. Le premier passage distant de CI et CodeQL est vert ; `main`, les tags de release et les fonctions de sécurité natives GitHub sont désormais protégés.
 
-Les décisions propriétaire sont désormais enregistrées : licence non commerciale conservée, Apple Developer visé à court terme, support Apple Silicon uniquement, préférences par note, documentation technique en anglais avec un README EN/FR, passage obligatoire par pull request et nettoyage historique autorisé à condition de préserver auteurs, dates, messages et ancienneté.
+Les décisions propriétaire sont désormais enregistrées : passage à la licence open source OSI Apache-2.0, Apple Developer visé à court terme, support Apple Silicon uniquement, préférences par note, documentation technique en anglais avec un README EN/FR, passage obligatoire par pull request et nettoyage historique autorisé à condition de préserver auteurs, dates, messages et ancienneté.
 
 ## 3. Tableau de santé
 
@@ -44,7 +44,7 @@ Les décisions propriétaire sont désormais enregistrées : licence non commerc
 | Release | ad hoc, non notarizée | workflow Developer ID/notary fail-closed | première `v1.3.0` vérifiée sur Mac propre |
 | CI/sécurité | aucune Action, protections off | CI + CodeQL verts, checks requis, scans et tags protégés | surveiller alertes et maintenir les SHA Actions |
 | Documentation | obsolète/incomplète | README et corpus mainteneur complets | mise à jour à chaque changement public |
-| Licence | custom non commerciale, dite open source | politique non commerciale confirmée et terminologie corrigée | revue juridique du texte custom |
+| Licence | custom non commerciale, dite open source | Apache-2.0 OSI adoptée et documentation alignée | conserver métadonnées SPDX, attribution et conformité |
 | Git | `.build` suivi, historique ~80 Mio distant | `.build` retiré de tout l'historique, chronologie conservée | annoncer les nouveaux hashes et garder la sauvegarde hors remote |
 
 ## 4. Baseline vérifiée
@@ -82,7 +82,7 @@ Les décisions propriétaire sont désormais enregistrées : licence non commerc
 
 | ID | Constat | Risque | Traitement | Statut |
 | --- | --- | --- | --- | --- |
-| P0-01 | Licence non commerciale incompatible avec l'étiquette « open source » | attentes juridiques et communautaires trompeuses | politique non commerciale conservée, README corrigé en « source-available » | Décidé ; revue juridique conseillée |
+| P0-01 | Licence non commerciale incompatible avec l'étiquette « open source » | attentes juridiques et communautaires trompeuses | remplacement explicite par Apache-2.0, licence standard approuvée OSI | Terminé |
 | P0-02 | Releases publiques ad hoc/non notarizées | rejet Gatekeeper et faible confiance binaire | workflow Developer ID + hardened runtime + notary + staple + checksum + attestation | Implémenté ; compte Apple prévu à court terme |
 | P0-03 | Version `1.0 (1)` dans toutes les releases | mises à jour et diagnostic impossibles | `VERSION`, injection plist et build number monotone | Implémenté |
 | P0-04 | Historique Git dominé par `.build` | clones lourds, chemins machine exposés | bundle complet vérifié puis filtre ciblé avec conservation des commits et métadonnées | Terminé |
@@ -256,7 +256,7 @@ Matrice à maintenir à chaque changement :
 
 ### Bloquants avant release `v1.3.0`
 
-- [x] Conserver la licence non commerciale source-available ; faire relire son texte custom avant distribution plus large.
+- [x] Adopter Apache-2.0, licence standard approuvée OSI, et aligner toute la documentation publique.
 - [x] Relire/merger la PR avec CI et CodeQL verts.
 - [ ] Configurer l'environnement GitHub `release` et les secrets Developer ID.
 - [ ] Créer une clé de signature Git pour les tags et documenter sa garde.
@@ -295,7 +295,8 @@ Matrice à maintenir à chaque changement :
 | 2026-08-10 | `v1.3.0` comme prochaine version préparée | `v1.2` existe et `main` contient déjà plusieurs fonctionnalités | Oui avant tag |
 | 2026-08-10 | Distribution Apple Silicon uniquement | périmètre produit explicitement choisi par le mainteneur | Oui |
 | 2026-08-10 | Release fail-closed | ne plus demander aux utilisateurs d'affaiblir Gatekeeper | Non négociable pour les binaires publics |
-| 2026-08-10 | Licence non commerciale et terminologie source-available | choix explicite du mainteneur ; ne pas présenter Quartz comme OSI open source | Oui avec décision propriétaire |
+| 2026-08-10 | Licence non commerciale et terminologie source-available | choix initial explicite du mainteneur ; ne pas présenter Quartz comme OSI open source | Supplantée le 2026-08-11 |
+| 2026-08-11 | Relicencier Quartz sous Apache License 2.0 (`Apache-2.0`) | afficher un engagement open source OSI clair et reconnu auprès des recruteurs, utilisateurs et contributeurs | Non pour les copies déjà publiées sous Apache-2.0 ; changement prospectif possible |
 | 2026-08-10 | Squash-only et branches fusionnées supprimées | historique lisible et entretien réduit | Oui |
 | 2026-08-10 | Toute modification de `main` doit passer par une PR | décision explicite du mainteneur | Oui |
 | 2026-08-10 | Tags `v*` non modifiables et non supprimables | conserver l'identité et la traçabilité des releases | Oui via le ruleset |

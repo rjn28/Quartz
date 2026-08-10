@@ -11,6 +11,8 @@ Thank you for helping improve Quartz. Keep changes focused, testable, and consis
 
 By participating, you agree to follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
+Unless explicitly stated otherwise, contributions intentionally submitted for inclusion in Quartz are provided under the [Apache License 2.0](LICENSE), as described by section 5 of that license. Submit only work you have the right to contribute.
+
 ## Development setup
 
 Requirements:

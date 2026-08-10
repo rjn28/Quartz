@@ -1,6 +1,6 @@
 # Support
 
-Quartz is maintained as an independent source-available project.
+Quartz is maintained as an independent open source project under Apache License 2.0.
 
 - Use the bug report form for reproducible defects.
 - Use the feature request form for scoped product proposals.
