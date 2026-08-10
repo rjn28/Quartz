@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -9,26 +9,21 @@ let package = Package(
     products: [
         .executable(
             name: "QuartzApp",
-            targets: ["QuartzTarget"]),
+            targets: ["Quartz"]
+        )
     ],
     targets: [
         .executableTarget(
-            name: "QuartzTarget",
-            dependencies: [],
-            path: ".",
-            exclude: [
-                "bundle_app.sh",
-                "BuildArtifacts",
-                "docs",
-                "Resources",
-                ".gitignore",
-                "README.md",
-                "LICENSE",
-                "logoquartz.png"
-            ],
+            name: "Quartz",
+            path: "Sources/Quartz",
             resources: [
                 .process("Resources")
             ]
         ),
+        .testTarget(
+            name: "QuartzTests",
+            dependencies: ["Quartz"],
+            path: "Tests/QuartzTests"
+        )
     ]
 )

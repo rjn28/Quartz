@@ -1,0 +1,133 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    name: Sign, notarize, and publish
+    runs-on: macos-15
+    timeout-minutes: 45
+    environment: release
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate signed tag and version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          TAG_SIGNING_PUBLIC_KEY: ${{ secrets.TAG_SIGNING_PUBLIC_KEY }}
+        run: |
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "${RELEASE_TAG#v}" = "$(tr -d '[:space:]' < VERSION)"
+          test -n "$TAG_SIGNING_PUBLIC_KEY"
+          export GNUPGHOME="$RUNNER_TEMP/quartz-tag-verification"
+          install -d -m 700 "$GNUPGHOME"
+          printf '%s' "$TAG_SIGNING_PUBLIC_KEY" | gpg --batch --import
+          git tag --verify "$RELEASE_TAG"
+
+      - name: Verify release commit
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          tag_commit="$(git rev-list -n 1 "$RELEASE_TAG")"
+          git fetch origin main:refs/remotes/origin/main
+          git merge-base --is-ancestor "$tag_commit" origin/main
+
+      - name: Run build and test checks
+        run: ./scripts/check.sh
+
+      - name: Validate release credentials
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          DEVELOPER_ID_APPLICATION: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          for value in \
+            "$BUILD_CERTIFICATE_BASE64" \
+            "$P12_PASSWORD" \
+            "$KEYCHAIN_PASSWORD" \
+            "$DEVELOPER_ID_APPLICATION" \
+            "$APPLE_ID" \
+            "$APPLE_APP_SPECIFIC_PASSWORD" \
+            "$APPLE_TEAM_ID"; do
+            test -n "$value"
+          done
+
+      - name: Import Developer ID certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          certificate_path="$RUNNER_TEMP/developer-id.p12"
+          keychain_path="$RUNNER_TEMP/quartz-signing.keychain-db"
+          printf '%s' "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$keychain_path"
+          security import "$certificate_path" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$keychain_path"
+          security list-keychain -d user -s "$keychain_path"
+
+      - name: Build signed universal disk image
+        env:
+          CODE_SIGN_IDENTITY: ${{ secrets.DEVELOPER_ID_APPLICATION }}
+        run: ./scripts/package_app.sh --build-number "$((GITHUB_RUN_NUMBER + 1000))"
+
+      - name: Notarize and staple
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          RELEASE_VERSION: ${{ github.ref_name }}
+        run: |
+          dmg="BuildArtifacts/Quartz-${RELEASE_VERSION#v}.dmg"
+          xcrun notarytool submit "$dmg" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+          xcrun stapler staple "$dmg"
+          xcrun stapler validate "$dmg"
+          spctl --assess --verbose=2 --type open --context context:primary-signature "$dmg"
+
+      - name: Generate checksum
+        env:
+          RELEASE_VERSION: ${{ github.ref_name }}
+        run: |
+          cd BuildArtifacts
+          shasum -a 256 "Quartz-${RELEASE_VERSION#v}.dmg" > "Quartz-${RELEASE_VERSION#v}.dmg.sha256"
+
+      - name: Attest release provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: BuildArtifacts/Quartz-*.dmg
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version="${RELEASE_TAG#v}"
+          gh release create "$RELEASE_TAG" \
+            "BuildArtifacts/Quartz-$version.dmg" \
+            "BuildArtifacts/Quartz-$version.dmg.sha256" \
+            --title "Quartz $version" \
+            --generate-notes \
+            --verify-tag
