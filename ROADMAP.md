@@ -5,17 +5,18 @@ The roadmap is intentionally short. Priorities can change after user feedback or
 ## Now — release readiness
 
 - Review and merge the modernization pull request with green CI and CodeQL checks.
-- Decide whether Quartz becomes OSI open source or keeps a non-commercial source-available license.
+- Keep the non-commercial source-available license and have its custom wording legally reviewed before broader distribution.
 - Configure Apple Developer ID credentials and GitHub's protected `release` environment.
-- Publish a signed, notarized, checksummed, and attested `v1.3.0` universal release.
-- Protect `main` and release tags after the first successful checks expose stable status names.
+- Publish a signed, notarized, checksummed, and attested Apple Silicon `v1.3.0` release.
+- Keep the existing `main` checks and immutable release-tag rules enforced.
 
 ## Next — data durability and product polish
 
 - Move notes from one `UserDefaults` blob to independently stored, atomic, versioned records in Application Support.
 - Normalize drawing coordinates so canvases adapt cleanly to window resizing.
 - Add UI automation for launch, multi-window restoration, keyboard commands, VoiceOver, and export flows.
-- Add localization infrastructure and decide whether project documentation should be bilingual.
+- Add Sparkle only after the first notarized release, with a signed appcast and an explicitly documented rollback/update policy.
+- Keep technical documentation in English and maintain the English/French README selector.
 - Refresh release screenshots and add a short privacy/data-backup guide.
 
 ## Later — optional growth

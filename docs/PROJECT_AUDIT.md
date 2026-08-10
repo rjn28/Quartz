@@ -27,9 +27,9 @@ Quartz partait d'une application SwiftUI compacte et fonctionnelle, sans dépend
 3. **Distribution** : version bundle bloquée à `1.0 (1)`, binaire public arm64 seulement, signature ad hoc, aucune notarisation, aucun pipeline de release fiable.
 4. **Dépôt et communauté** : aucune CI, aucune protection de branche, santé communautaire GitHub à 42 %, documentation obsolète, licence non commerciale présentée à tort comme open source, artefacts `.build` suivis et historique démesuré.
 
-La branche de modernisation transforme le projet en base Swift 6 testable et maintenable : structure SwiftPM standard, 28 tests initiaux, migrations idempotentes, exports sûrs, interface découpée et accessible, packaging universel validé, CI/CodeQL/release fail-closed, documentation et gouvernance minimales. Le premier passage distant de CI et CodeQL est vert ; `main`, les tags de release et les fonctions de sécurité natives GitHub sont désormais protégés.
+La branche de modernisation transforme le projet en base Swift 6 testable et maintenable : structure SwiftPM standard, 28 tests initiaux, migrations idempotentes, exports sûrs, interface découpée et accessible, packaging Apple Silicon validé, CI/CodeQL/release fail-closed, documentation et gouvernance minimales. Le premier passage distant de CI et CodeQL est vert ; `main`, les tags de release et les fonctions de sécurité natives GitHub sont désormais protégés.
 
-Trois décisions ne doivent pas être prises implicitement : choix d'une licence OSI ou maintien source-available, financement/configuration Developer ID, et réécriture destructive éventuelle de l'historique Git.
+Les décisions propriétaire sont désormais enregistrées : licence non commerciale conservée, Apple Developer visé à court terme, support Apple Silicon uniquement, préférences par note, documentation technique en anglais avec un README EN/FR, passage obligatoire par pull request et nettoyage historique autorisé à condition de préserver auteurs, dates, messages et ancienneté.
 
 ## 3. Tableau de santé
 
@@ -41,12 +41,12 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 | Persistance | Blob global, migration incomplète | migration v2 + quarantaine + flush | fichiers atomiques indépendants |
 | Multi-fenêtres | snapshots concurrents d'une même note | route stable et dédupliquée par note | test UI de restauration |
 | Export | erreurs avalées, collisions, PDF géant | erreurs visibles, noms uniques, PDF paginé | panneau de sauvegarde optionnel + UI tests |
-| Packaging | destructif, version en dur, arm64 | isolé, versionné, universel, vérifié | reproductibilité attestée |
+| Packaging | destructif, version en dur, arm64 | isolé, versionné, Apple Silicon, vérifié | reproductibilité attestée |
 | Release | ad hoc, non notarizée | workflow Developer ID/notary fail-closed | première `v1.3.0` vérifiée sur Mac propre |
 | CI/sécurité | aucune Action, protections off | CI + CodeQL verts, checks requis, scans et tags protégés | surveiller alertes et maintenir les SHA Actions |
 | Documentation | obsolète/incomplète | README et corpus mainteneur complets | mise à jour à chaque changement public |
-| Licence | custom non commerciale, dite open source | terminologie source-available corrigée | décision explicite et licence revue |
-| Git | `.build` suivi, historique ~80 Mio distant | croissance stoppée dans le tip | décision de nettoyage historique |
+| Licence | custom non commerciale, dite open source | politique non commerciale confirmée et terminologie corrigée | revue juridique du texte custom |
+| Git | `.build` suivi, historique ~80 Mio distant | croissance stoppée dans le tip | retirer `.build` en préservant la chronologie |
 
 ## 4. Baseline vérifiée
 
@@ -83,10 +83,10 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 
 | ID | Constat | Risque | Traitement | Statut |
 | --- | --- | --- | --- | --- |
-| P0-01 | Licence non commerciale incompatible avec l'étiquette « open source » | attentes juridiques et communautaires trompeuses | README corrigé en « source-available » ; choix final mainteneur requis | En attente décision |
-| P0-02 | Releases publiques ad hoc/non notarizées | rejet Gatekeeper et faible confiance binaire | workflow Developer ID + hardened runtime + notary + staple + checksum + attestation | Implémenté, credentials requis |
+| P0-01 | Licence non commerciale incompatible avec l'étiquette « open source » | attentes juridiques et communautaires trompeuses | politique non commerciale conservée, README corrigé en « source-available » | Décidé ; revue juridique conseillée |
+| P0-02 | Releases publiques ad hoc/non notarizées | rejet Gatekeeper et faible confiance binaire | workflow Developer ID + hardened runtime + notary + staple + checksum + attestation | Implémenté ; compte Apple prévu à court terme |
 | P0-03 | Version `1.0 (1)` dans toutes les releases | mises à jour et diagnostic impossibles | `VERSION`, injection plist et build number monotone | Implémenté |
-| P0-04 | Historique Git dominé par `.build` | clones lourds, chemins machine exposés | retrait du tip ; nettoyage historique nécessite accord explicite | Partiel |
+| P0-04 | Historique Git dominé par `.build` | clones lourds, chemins machine exposés | retrait du tip ; réécriture autorisée avec sauvegarde et conservation des métadonnées | En cours |
 | P0-05 | Aucun garde-fou GitHub | régressions directes sur `main` | CI/CodeQL requis, historique linéaire, force-push/suppression bloqués, tags `v*` immuables | Terminé |
 
 ### P1 — données et correctness
@@ -169,7 +169,7 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 
 - `bundle_app.sh` conservé comme wrapper compatible.
 - Script strict `set -euo pipefail` et staging `mktemp` nettoyé par trap.
-- Build universel `arm64 x86_64` vérifié avec `lipo`.
+- Build Apple Silicon `arm64` uniquement, vérifié avec `lipo`.
 - Info.plist suivi, version centralisée `1.3.0`, build number injecté.
 - Iconset complet créé à partir des ressources suivies.
 - Copie des futurs bundles de ressources SwiftPM.
@@ -179,7 +179,7 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 
 ### 6.7 GitHub et communauté
 
-- CI avec checks locaux et packaging universel smoke-testé.
+- CI avec checks locaux et packaging Apple Silicon smoke-testé.
 - CodeQL Swift hebdomadaire et sur PR/push.
 - Actions tierces/first-party épinglées à des SHA exacts.
 - Dependabot mensuel pour GitHub Actions.
@@ -228,8 +228,8 @@ Matrice à maintenir à chaque changement :
 | Tests | `swift test` | 28/28 réussis |
 | Build Release | `swift build -c release` | Réussi |
 | Syntaxe shell | `bash -n bundle_app.sh scripts/*.sh` | Réussi |
-| Packaging universel | `./scripts/package_app.sh` | Réussi |
-| Architectures | `lipo -archs` | `arm64 x86_64` |
+| Packaging Apple Silicon | `./scripts/package_app.sh` | Réussi |
+| Architecture | `lipo -archs` | `arm64` uniquement |
 | Plist | `plutil -lint` | Réussi |
 | Signature locale | `codesign --verify --deep --strict` | Réussi, ad hoc attendue |
 | DMG | `hdiutil verify` | Réussi |
@@ -244,13 +244,13 @@ Matrice à maintenir à chaque changement :
 
 ### Bloquants avant release `v1.3.0`
 
-- [ ] Choisir et valider la licence.
+- [x] Conserver la licence non commerciale source-available ; faire relire son texte custom avant distribution plus large.
 - [ ] Relire/merger la PR avec CI et CodeQL verts.
 - [ ] Configurer l'environnement GitHub `release` et les secrets Developer ID.
 - [ ] Créer une clé de signature Git pour les tags et documenter sa garde.
 - [x] Activer les protections `main` et tags à partir des noms de checks observés.
 - [ ] Tester la migration sur une copie réelle des préférences `v1.2`.
-- [ ] Tester le DMG notarizé sur un Mac propre et sur Intel si possible.
+- [ ] Tester le DMG notarizé sur un Mac Apple Silicon propre.
 - [ ] Mettre le changelog en section datée et créer le tag signé `v1.3.0`.
 
 ### P1 après release
@@ -261,13 +261,14 @@ Matrice à maintenir à chaque changement :
 - [ ] Tests UI multi-fenêtres et accessibilité.
 - [ ] Benchmark de frappe avec bibliothèque/canvas volumineux.
 - [ ] Sauvegarde/import d'une note Quartz complète.
+- [ ] Après la première release notarisée, intégrer Sparkle avec appcast et signatures EdDSA, tests fail-closed et procédure de rollback.
 
 ### P2 maintenance dépôt
 
-- [ ] Décider puis exécuter ou refuser formellement le nettoyage historique `git-filter-repo`.
+- [ ] Exécuter le nettoyage historique `git-filter-repo` avec sauvegarde locale, sans perdre auteurs, dates, messages ni ancienneté.
 - [ ] Publier un canal privé dédié aux signalements de conduite et l'ajouter à `MAINTAINERS.md`/`CODE_OF_CONDUCT.md`.
 - [ ] Ajouter une social preview optimisée sur GitHub.
-- [ ] Décider documentation anglaise seule ou bilingue.
+- [x] Conserver la documentation technique en anglais et proposer un sélecteur README EN/FR sur GitHub.
 - [ ] Évaluer Discussions uniquement si le volume communautaire le justifie.
 - [ ] Mettre en place un scanner local spécialisé si les dépendances augmentent.
 
@@ -280,12 +281,17 @@ Matrice à maintenir à chaque changement :
 | 2026-08-10 | Une fenêtre typée par note | empêche l'écrasement par snapshots stale | Oui, avec session partagée à concevoir |
 | 2026-08-10 | UserDefaults renforcé avant migration de backend | éviter une migration de stockage spéculative dans le même lot | Oui |
 | 2026-08-10 | `v1.3.0` comme prochaine version préparée | `v1.2` existe et `main` contient déjà plusieurs fonctionnalités | Oui avant tag |
-| 2026-08-10 | Distribution universelle | macOS 14 supporte encore des Macs Intel | Oui |
+| 2026-08-10 | Distribution Apple Silicon uniquement | périmètre produit explicitement choisi par le mainteneur | Oui |
 | 2026-08-10 | Release fail-closed | ne plus demander aux utilisateurs d'affaiblir Gatekeeper | Non négociable pour les binaires publics |
-| 2026-08-10 | Terminologie source-available | reflète la licence actuelle sans la modifier implicitement | Oui après décision de licence |
+| 2026-08-10 | Licence non commerciale et terminologie source-available | choix explicite du mainteneur ; ne pas présenter Quartz comme OSI open source | Oui avec décision propriétaire |
 | 2026-08-10 | Squash-only et branches fusionnées supprimées | historique lisible et entretien réduit | Oui |
-| 2026-08-10 | `main` exige CI + CodeQL, sans approbation PR obligatoire | garde-fous immédiats sans bloquer un dépôt solo | Oui |
+| 2026-08-10 | Toute modification de `main` doit passer par une PR | décision explicite du mainteneur | Oui |
 | 2026-08-10 | Tags `v*` non modifiables et non supprimables | conserver l'identité et la traçabilité des releases | Oui via le ruleset |
+| 2026-08-10 | Compte Apple Developer visé à court terme | permettre une première release Developer ID notarisée | Oui |
+| 2026-08-10 | Sparkle seulement après notarisation | ne pas ajouter une chaîne de mise à jour avant d'avoir une chaîne de release fiable | Oui |
+| 2026-08-10 | Documentation anglaise, README EN/FR | corpus technique uniforme avec accueil GitHub bilingue | Oui |
+| 2026-08-10 | Thème, police et mode restent par note | choix d'expérience explicite du mainteneur | Oui avec migration |
+| 2026-08-10 | Nettoyage `.build` autorisé si chronologie préservée | réduire le dépôt sans effacer son ancienneté visible | Réécrit les hashes, sauvegarde requise |
 
 ## 11. Cadence d'entretien recommandée
 
@@ -318,15 +324,9 @@ Matrice à maintenir à chaque changement :
 - exercice de restauration d'une sauvegarde de notes ;
 - audit manuel VoiceOver, clavier, clair/sombre et Reduce Motion.
 
-## 12. Questions propriétaire ouvertes
+## 12. Décision propriétaire encore ouverte
 
-1. Quartz doit-il adopter une licence open source reconnue par l'OSI, et laquelle, ou conserver explicitement l'interdiction commerciale/App Store ?
-2. Un abonnement Apple Developer et un certificat Developer ID peuvent-ils être financés et configurés pour `v1.3.0` ?
-3. La documentation doit-elle rester principalement en anglais, devenir bilingue anglais/français, ou passer en français ?
-4. Faut-il autoriser une réécriture destructive de tout l'historique pour supprimer les anciens blobs `.build`, avec force-push coordonné et obligation de re-cloner ?
-5. La configuration actuelle impose les checks et interdit force-push/suppression, tout en laissant le mainteneur administrateur contourner la règle : faut-il aussi imposer systématiquement une PR et/ou une approbation externe ?
-6. La portée thème/police/mode doit-elle rester par note ou devenir une préférence globale/par fenêtre ?
-7. Quel canal privé (adresse dédiée ou formulaire externe) faut-il publier pour les signalements de conduite ?
+Un canal privé de conduite sert à recevoir confidentiellement les signalements de harcèlement, comportement abusif ou violation du Code of Conduct. Il est distinct du private vulnerability reporting, réservé aux failles techniques. Aucun email ne sera publié sans consentement ; `CODE_OF_CONDUCT.md` reste transparent sur l'absence actuelle de canal dédié jusqu'au choix éventuel d'une adresse ou d'un formulaire privé.
 
 ## 13. Règle de mise à jour de ce rapport
 

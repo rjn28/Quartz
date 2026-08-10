@@ -1,4 +1,6 @@
 <div align="center">
+  <strong>English</strong> · <a href="README.fr.md">Français</a>
+
   <img src="Sources/Quartz/Resources/Assets.xcassets/AppIcon.appiconset/128.png" width="128" height="128" alt="Quartz app icon">
 
   # Quartz
@@ -7,7 +9,7 @@
 
   [![CI](https://github.com/rjn28/Quartz/actions/workflows/ci.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/ci.yml)
   [![CodeQL](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml/badge.svg)](https://github.com/rjn28/Quartz/actions/workflows/codeql.yml)
-  ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-black?logo=apple)
+  ![macOS 14+ Apple Silicon](https://img.shields.io/badge/macOS-14%2B%20Apple%20Silicon-black?logo=apple)
   ![Swift 6](https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white)
   ![Source available](https://img.shields.io/badge/license-source--available-red)
 </div>
@@ -34,7 +36,7 @@ Quartz is a native SwiftUI note editor designed to keep writing fast and distrac
 
 - macOS 14 Sonoma or later.
 - Xcode Command Line Tools with Swift 6 for development.
-- Apple Silicon and Intel are supported by the universal packaging workflow.
+- Apple Silicon Mac. Intel Macs are not supported.
 
 ## Install
 
@@ -64,7 +66,7 @@ Run the complete local validation suite:
 ./scripts/check.sh
 ```
 
-Create a universal local DMG:
+Create an Apple Silicon local DMG:
 
 ```bash
 ./bundle_app.sh
@@ -94,6 +96,6 @@ Bug reports and focused pull requests are welcome. Read [CONTRIBUTING.md](CONTRI
 
 ## License
 
-Quartz is currently **source-available**, not OSI open source: the custom [LICENSE](LICENSE) permits non-commercial use and modification while prohibiting commercial use and app-store distribution. The long-term license remains an explicit maintainer decision tracked in the [project audit](docs/PROJECT_AUDIT.md).
+Quartz is intentionally **source-available**, not OSI open source: the custom [LICENSE](LICENSE) permits non-commercial use and modification while prohibiting commercial use and app-store distribution. This non-commercial policy is a confirmed maintainer decision tracked in the [project audit](docs/PROJECT_AUDIT.md).
 
 Maintained by [Roch Junior Nicolas](https://github.com/rjn28).

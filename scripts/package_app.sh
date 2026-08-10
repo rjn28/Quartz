@@ -7,13 +7,12 @@ readonly PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 readonly APP_NAME="Quartz"
 readonly EXECUTABLE_NAME="QuartzApp"
 readonly DEFAULT_OUTPUT_DIR="$PROJECT_ROOT/BuildArtifacts"
-readonly DEFAULT_ARCHITECTURES="arm64 x86_64"
+readonly ARCHITECTURE="arm64"
 
 version="$(tr -d '[:space:]' < "$PROJECT_ROOT/VERSION")"
 build_number=""
 identity="${CODE_SIGN_IDENTITY:--}"
 output_dir="${OUTPUT_DIR:-$DEFAULT_OUTPUT_DIR}"
-architectures="${ARCHITECTURES:-$DEFAULT_ARCHITECTURES}"
 
 usage() {
     echo "Usage: $0 [--version X.Y.Z] [--build-number N] [--identity NAME] [--output-dir PATH]"
@@ -67,25 +66,6 @@ if [[ ! "$build_number" =~ ^[1-9][0-9]*$ ]]; then
     exit 2
 fi
 
-read -r -a architecture_list <<< "$architectures"
-if [[ ${#architecture_list[@]} -eq 0 ]]; then
-    echo "At least one architecture is required" >&2
-    exit 2
-fi
-
-swift_architecture_args=()
-for architecture in "${architecture_list[@]}"; do
-    case "$architecture" in
-        arm64|x86_64)
-            swift_architecture_args+=(--arch "$architecture")
-            ;;
-        *)
-            echo "Unsupported architecture: $architecture" >&2
-            exit 2
-            ;;
-    esac
-done
-
 mkdir -p "$output_dir"
 output_dir="$(cd "$output_dir" && pwd)"
 
@@ -98,17 +78,17 @@ readonly app_binary="$app_contents/MacOS/$APP_NAME"
 readonly staging_directory="$temporary_root/dmg"
 readonly output_dmg="$output_dir/$APP_NAME-$version.dmg"
 
-echo "Building $APP_NAME $version ($build_number) for ${architecture_list[*]}..."
+echo "Building $APP_NAME $version ($build_number) for Apple Silicon ($ARCHITECTURE)..."
 swift build \
     --package-path "$PROJECT_ROOT" \
     --configuration release \
-    "${swift_architecture_args[@]}"
+    --arch "$ARCHITECTURE"
 
 binary_directory="$(
     swift build \
         --package-path "$PROJECT_ROOT" \
         --configuration release \
-        "${swift_architecture_args[@]}" \
+        --arch "$ARCHITECTURE" \
         --show-bin-path
 )"
 readonly binary_directory
@@ -157,12 +137,10 @@ fi
 codesign --verify --deep --strict --verbose=2 "$app_bundle"
 
 built_architectures="$(lipo -archs "$app_binary")"
-for architecture in "${architecture_list[@]}"; do
-    if [[ " $built_architectures " != *" $architecture "* ]]; then
-        echo "Missing architecture $architecture in $app_binary" >&2
-        exit 1
-    fi
-done
+if [[ "$built_architectures" != "$ARCHITECTURE" ]]; then
+    echo "Expected an Apple Silicon-only binary, found: $built_architectures" >&2
+    exit 1
+fi
 
 mkdir -p "$staging_directory"
 cp -R "$app_bundle" "$staging_directory/"

@@ -85,7 +85,7 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$keychain_path"
           security list-keychain -d user -s "$keychain_path"
 
-      - name: Build signed universal disk image
+      - name: Build signed Apple Silicon disk image
         env:
           CODE_SIGN_IDENTITY: ${{ secrets.DEVELOPER_ID_APPLICATION }}
         run: ./scripts/package_app.sh --build-number "$((GITHUB_RUN_NUMBER + 1000))"

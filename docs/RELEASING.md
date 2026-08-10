@@ -1,6 +1,6 @@
 # Releasing Quartz
 
-Public releases must be reproducible, universal, Developer ID-signed, notarized, stapled, checksummed, and traceable to a signed GPG tag on `main`. Ad hoc output from local packaging is for testing only.
+Public releases must be reproducible, Apple Silicon-only, Developer ID-signed, notarized, stapled, checksummed, and traceable to a signed GPG tag on `main`. Ad hoc output from local packaging is for testing only.
 
 ## Version policy
 
@@ -17,7 +17,7 @@ Public releases must be reproducible, universal, Developer ID-signed, notarized,
 hdiutil verify "BuildArtifacts/Quartz-$(<VERSION).dmg"
 ```
 
-The default local artifact is universal but ad hoc-signed. Inspect it with:
+The default local artifact is Apple Silicon-only but ad hoc-signed. Inspect it with:
 
 ```bash
 codesign --display --verbose=4 /path/to/Quartz.app
@@ -59,7 +59,7 @@ Use environment protection and least-privilege access for maintainers who may pu
    git push origin "v$(<VERSION)"
    ```
 
-5. The `Release` workflow validates the tag/version, imports the certificate into an ephemeral keychain, packages the universal app, notarizes and staples the DMG, assesses it with Gatekeeper, creates a checksum and provenance attestation, and publishes the GitHub release.
+5. The `Release` workflow validates the tag/version, imports the certificate into an ephemeral keychain, packages the Apple Silicon app, notarizes and staples the DMG, assesses it with Gatekeeper, creates a checksum and provenance attestation, and publishes the GitHub release.
 6. Download the public asset on a clean Mac and verify install, launch, text persistence, canvas migration, TXT/PDF export, architecture, checksum, signature, and stapled ticket.
 
    ```bash
@@ -72,3 +72,7 @@ Use environment protection and least-privilege access for maintainers who may pu
 Do not bypass a failed signature, notarization, tag verification, CI check, or Gatekeeper assessment. Diagnose and rerun from a new commit/tag when appropriate; never move an already published release tag.
 
 If credentials are unavailable, publish source changes without a binary release rather than distributing a build that asks users to weaken macOS security.
+
+## Post-notarization update roadmap
+
+Sparkle is intentionally deferred until the first Developer ID-signed and notarized Quartz release has been validated on a clean Mac. The later integration must use a signed appcast, EdDSA update signatures, HTTPS hosting, rollback documentation, and tests proving that update verification fails closed. Sparkle must not weaken the release workflow or become a substitute for notarization.

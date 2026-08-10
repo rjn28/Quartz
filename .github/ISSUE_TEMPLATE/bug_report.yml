@@ -19,7 +19,7 @@ body:
     id: macos
     attributes:
       label: macOS and Mac
-      description: Include macOS version and Apple Silicon or Intel.
+      description: Include the macOS version and Apple Silicon model.
       placeholder: macOS 15.6, Apple M2
     validations:
       required: true
