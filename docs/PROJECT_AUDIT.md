@@ -3,6 +3,7 @@
 > Document vivant de pilotage technique et communautaire.
 > Audit initial : 10 août 2026.
 > Branche de modernisation : `codex/modernize-quartz`.
+> Pull request de modernisation : [#1](https://github.com/rjn28/Quartz/pull/1).
 > Mainteneur : `@rjn28`.
 
 ## 1. Objet du document
@@ -26,7 +27,7 @@ Quartz partait d'une application SwiftUI compacte et fonctionnelle, sans dépend
 3. **Distribution** : version bundle bloquée à `1.0 (1)`, binaire public arm64 seulement, signature ad hoc, aucune notarisation, aucun pipeline de release fiable.
 4. **Dépôt et communauté** : aucune CI, aucune protection de branche, santé communautaire GitHub à 42 %, documentation obsolète, licence non commerciale présentée à tort comme open source, artefacts `.build` suivis et historique démesuré.
 
-La branche de modernisation transforme le projet en base Swift 6 testable et maintenable : structure SwiftPM standard, 28 tests initiaux, migrations idempotentes, exports sûrs, interface découpée et accessible, packaging universel validé, CI/CodeQL/release fail-closed, documentation et gouvernance minimales.
+La branche de modernisation transforme le projet en base Swift 6 testable et maintenable : structure SwiftPM standard, 28 tests initiaux, migrations idempotentes, exports sûrs, interface découpée et accessible, packaging universel validé, CI/CodeQL/release fail-closed, documentation et gouvernance minimales. Le premier passage distant de CI et CodeQL est vert ; `main`, les tags de release et les fonctions de sécurité natives GitHub sont désormais protégés.
 
 Trois décisions ne doivent pas être prises implicitement : choix d'une licence OSI ou maintien source-available, financement/configuration Developer ID, et réécriture destructive éventuelle de l'historique Git.
 
@@ -42,7 +43,7 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 | Export | erreurs avalées, collisions, PDF géant | erreurs visibles, noms uniques, PDF paginé | panneau de sauvegarde optionnel + UI tests |
 | Packaging | destructif, version en dur, arm64 | isolé, versionné, universel, vérifié | reproductibilité attestée |
 | Release | ad hoc, non notarizée | workflow Developer ID/notary fail-closed | première `v1.3.0` vérifiée sur Mac propre |
-| CI/sécurité | aucune Action, protections off | CI + CodeQL + dépendances Actions | checks requis + scans GitHub activés |
+| CI/sécurité | aucune Action, protections off | CI + CodeQL verts, checks requis, scans et tags protégés | surveiller alertes et maintenir les SHA Actions |
 | Documentation | obsolète/incomplète | README et corpus mainteneur complets | mise à jour à chaque changement public |
 | Licence | custom non commerciale, dite open source | terminologie source-available corrigée | décision explicite et licence revue |
 | Git | `.build` suivi, historique ~80 Mio distant | croissance stoppée dans le tip | décision de nettoyage historique |
@@ -86,7 +87,7 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 | P0-02 | Releases publiques ad hoc/non notarizées | rejet Gatekeeper et faible confiance binaire | workflow Developer ID + hardened runtime + notary + staple + checksum + attestation | Implémenté, credentials requis |
 | P0-03 | Version `1.0 (1)` dans toutes les releases | mises à jour et diagnostic impossibles | `VERSION`, injection plist et build number monotone | Implémenté |
 | P0-04 | Historique Git dominé par `.build` | clones lourds, chemins machine exposés | retrait du tip ; nettoyage historique nécessite accord explicite | Partiel |
-| P0-05 | Aucun garde-fou GitHub | régressions directes sur `main` | CI/CodeQL ajoutés ; protection après premier run réussi | À activer après push |
+| P0-05 | Aucun garde-fou GitHub | régressions directes sur `main` | CI/CodeQL requis, historique linéaire, force-push/suppression bloqués, tags `v*` immuables | Terminé |
 
 ### P1 — données et correctness
 
@@ -184,6 +185,12 @@ Trois décisions ne doivent pas être prises implicitement : choix d'une licence
 - Dependabot mensuel pour GitHub Actions.
 - Formulaires d'issue, template PR, CODEOWNERS.
 - README, contribution, sécurité, support, conduite, mainteneur, roadmap, changelog, architecture et release guide.
+- Description et huit topics techniques publiés ; label `needs-triage` créé.
+- Alertes et correctifs Dependabot, private vulnerability reporting, secret scanning et push protection activés.
+- Actions limitées aux actions appartenant à GitHub avec épinglage SHA obligatoire.
+- Merge limité au squash, historique linéaire et suppression automatique des branches fusionnées.
+- `main` protégé par `Validate` et `Analyze Swift`, branche à jour et conversations résolues ; force-push et suppression interdits.
+- Ruleset actif `Protect release tags` : création de nouveaux tags `v*` autorisée, modification et suppression interdites.
 
 ## 7. Stratégie de tests
 
@@ -230,8 +237,8 @@ Matrice à maintenir à chaque changement :
 | YAML workflows | parse YAML local | Réussi |
 | PDF visuel | `pdftoppm` + inspection indépendante | Réussi : 7 pages A4, lignes 1–180 continues, aucun glyphe tronqué |
 | UI smoke test | lancement + contrôle accessibilité | Réussi : editor/preview/split, canvas, undo/redo, raccourcis et labels AX |
-| CI distante | GitHub Actions | À renseigner après push |
-| CodeQL distant | GitHub Actions | À renseigner après push |
+| CI distante | [run `31347600641`](https://github.com/rjn28/Quartz/actions/runs/31347600641) | Réussi (`Validate`, 1 min 28) |
+| CodeQL distant | [run `31347600613`](https://github.com/rjn28/Quartz/actions/runs/31347600613) | Réussi (`Analyze Swift`, 14 min 10) |
 
 ## 9. Backlog priorisé
 
@@ -241,7 +248,7 @@ Matrice à maintenir à chaque changement :
 - [ ] Relire/merger la PR avec CI et CodeQL verts.
 - [ ] Configurer l'environnement GitHub `release` et les secrets Developer ID.
 - [ ] Créer une clé de signature Git pour les tags et documenter sa garde.
-- [ ] Activer les protections `main` et tags à partir des noms de checks observés.
+- [x] Activer les protections `main` et tags à partir des noms de checks observés.
 - [ ] Tester la migration sur une copie réelle des préférences `v1.2`.
 - [ ] Tester le DMG notarizé sur un Mac propre et sur Intel si possible.
 - [ ] Mettre le changelog en section datée et créer le tag signé `v1.3.0`.
@@ -276,6 +283,9 @@ Matrice à maintenir à chaque changement :
 | 2026-08-10 | Distribution universelle | macOS 14 supporte encore des Macs Intel | Oui |
 | 2026-08-10 | Release fail-closed | ne plus demander aux utilisateurs d'affaiblir Gatekeeper | Non négociable pour les binaires publics |
 | 2026-08-10 | Terminologie source-available | reflète la licence actuelle sans la modifier implicitement | Oui après décision de licence |
+| 2026-08-10 | Squash-only et branches fusionnées supprimées | historique lisible et entretien réduit | Oui |
+| 2026-08-10 | `main` exige CI + CodeQL, sans approbation PR obligatoire | garde-fous immédiats sans bloquer un dépôt solo | Oui |
+| 2026-08-10 | Tags `v*` non modifiables et non supprimables | conserver l'identité et la traçabilité des releases | Oui via le ruleset |
 
 ## 11. Cadence d'entretien recommandée
 
@@ -314,7 +324,7 @@ Matrice à maintenir à chaque changement :
 2. Un abonnement Apple Developer et un certificat Developer ID peuvent-ils être financés et configurés pour `v1.3.0` ?
 3. La documentation doit-elle rester principalement en anglais, devenir bilingue anglais/français, ou passer en français ?
 4. Faut-il autoriser une réécriture destructive de tout l'historique pour supprimer les anciens blobs `.build`, avec force-push coordonné et obligation de re-cloner ?
-5. Après la première CI verte, `main` doit-elle exiger systématiquement une PR, ou seulement les checks et l'interdiction des force-push/suppressions pour ce dépôt solo ?
+5. La configuration actuelle impose les checks et interdit force-push/suppression, tout en laissant le mainteneur administrateur contourner la règle : faut-il aussi imposer systématiquement une PR et/ou une approbation externe ?
 6. La portée thème/police/mode doit-elle rester par note ou devenir une préférence globale/par fenêtre ?
 7. Quel canal privé (adresse dédiée ou formulaire externe) faut-il publier pour les signalements de conduite ?
 
