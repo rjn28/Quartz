@@ -18,8 +18,8 @@ All notable changes to Quartz are documented here. The project follows [Semantic
 - Reworked editor state around an invariant editor mode and stable per-note window identity.
 - Made the split editor resizable and the control surfaces responsive.
 - Centralized versioning and replaced the destructive packaging script with validated Apple Silicon-only packaging.
-- Updated project terminology from “open source” to “source-available” to match the current license.
-- Confirmed the non-commercial source-available license, English-first documentation, per-note preferences, and mandatory pull-request workflow.
+- Relicensed Quartz from its custom non-commercial terms to the OSI-approved Apache License 2.0 (`Apache-2.0`).
+- Confirmed English-first documentation, per-note preferences, and the mandatory pull-request workflow.
 
 ### Fixed
 

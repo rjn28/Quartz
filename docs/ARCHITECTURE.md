@@ -76,4 +76,4 @@ An ad hoc signature is allowed only for local testing. The GitHub release workfl
 - Drawing points are absolute rather than normalized to the canvas size.
 - UserDefaults persistence still encodes the complete library as one blob.
 - There are unit and export tests but no end-to-end UI automation yet.
-- The custom non-commercial source-available license is an explicit product decision; its wording still merits legal review before broader distribution.
+- Quartz is licensed under the OSI-approved Apache License 2.0 (`Apache-2.0`); contributions and distributions must preserve the license obligations and applicable notices.
