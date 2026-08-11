@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Sources/Quartz/Resources/Assets.xcassets/AppIcon.appiconset/128.png" width="96" height="96" alt="Icône de l’application Quartz">
+  <img src="docs/quartz-logo.webp" width="96" height="96" alt="Icône de l’application Quartz">
 </p>
 
 <h1 align="center">Quartz</h1>
