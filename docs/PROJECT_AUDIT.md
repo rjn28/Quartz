@@ -166,7 +166,7 @@ Les décisions propriétaire sont désormais enregistrées : passage à la licen
 
 ### 6.6 Packaging et release
 
-- `bundle_app.sh` conservé comme wrapper compatible.
+- Scripts de lancement, validation et packaging regroupés dans `scripts/` ; wrapper racine historique supprimé.
 - Script strict `set -euo pipefail` et staging `mktemp` nettoyé par trap.
 - Build Apple Silicon `arm64` uniquement, vérifié avec `lipo`.
 - Info.plist suivi, version centralisée `1.3.0`, build number injecté.
@@ -237,7 +237,7 @@ Matrice à maintenir à chaque changement :
 | Swift 6 concurrence stricte | `swift build -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors` | Réussi |
 | Tests | `swift test` | 28/28 réussis |
 | Build Release | `swift build -c release` | Réussi |
-| Syntaxe shell | `bash -n bundle_app.sh scripts/*.sh` | Réussi |
+| Syntaxe shell | `bash -n scripts/*.sh` | Réussi |
 | Packaging Apple Silicon | `./scripts/package_app.sh` | Réussi |
 | Architecture | `lipo -archs` | `arm64` uniquement |
 | Plist | `plutil -lint` | Réussi |

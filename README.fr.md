@@ -75,7 +75,7 @@ Lancez la validation locale complète :
 Créez un DMG local Apple Silicon :
 
 ```bash
-./bundle_app.sh
+./scripts/package_app.sh
 ```
 
 Le DMG est créé dans `BuildArtifacts/`. Sans `CODE_SIGN_IDENTITY`, le packaging local utilise une signature ad hoc réservée aux tests et impropre à une distribution publique. Consultez le [guide de release](docs/RELEASING.md) pour la signature Developer ID et la notarisation.

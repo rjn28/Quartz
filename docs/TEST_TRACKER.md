@@ -72,7 +72,7 @@ Use a disposable note unless the procedure explicitly requires legacy data. Reco
 
 | ID | Area | Procedure and expected result | Status | Last run | Environment | Evidence / notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| `MAN-001` | Launch from source | Run `./script/build_and_run.sh --verify`; Quartz launches from the locally built bundle without a crash. | `NOT RUN` | — | — | — |
+| `MAN-001` | Launch from source | Run `./scripts/build_and_run.sh --verify`; Quartz launches from the locally built bundle without a crash. | `PASS` | 2026-08-11 | macOS / Apple Silicon | Locally built bundle launched and its exact process path was verified. |
 | `MAN-002` | Editing and statistics | Create a note, enter ASCII, accented text, emoji, blank lines, and Markdown; text remains responsive and statistics update plausibly. | `NOT RUN` | — | — | — |
 | `MAN-003` | Immediate-quit durability | Type a unique final phrase and immediately press Command-Q; relaunch and confirm the entire phrase was saved. | `NOT RUN` | — | — | — |
 | `MAN-004` | Saved-note history | Create at least three titled notes, reopen each from Saved Texts, then delete the contents of a text-only note; titles and removal behavior are correct. | `NOT RUN` | — | — | — |

@@ -75,7 +75,7 @@ Run the complete local validation suite:
 Create an Apple Silicon local DMG:
 
 ```bash
-./bundle_app.sh
+./scripts/package_app.sh
 ```
 
 The DMG is written to `BuildArtifacts/`. Without `CODE_SIGN_IDENTITY`, local packaging uses an ad hoc signature for testing only and is not suitable for public distribution. See [the release guide](docs/RELEASING.md) for Developer ID signing and notarization.
