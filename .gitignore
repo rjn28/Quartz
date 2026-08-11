@@ -1,4 +1,5 @@
 .DS_Store
+.codex/
 .build/
 .swiftpm/
 DerivedData/
@@ -8,6 +9,5 @@ build/
 *.dmg
 *.app/
 
-BuildArtifacts/*
-!BuildArtifacts/.gitkeep
+BuildArtifacts/
 dist/
