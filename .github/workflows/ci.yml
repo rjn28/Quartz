@@ -1,10 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,10 +13,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
-    name: Validate
-    runs-on: macos-15
-    timeout-minutes: 25
+  classify:
+    name: Classify changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      requires_macos: ${{ steps.changes.outputs.requires_macos }}
 
     steps:
       - name: Check out repository
@@ -36,6 +37,35 @@ jobs:
             git show --check --format= HEAD
           fi
 
+      - name: Detect changes requiring macOS
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "requires_macos=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed_files="$(git diff --name-only "$BASE_SHA...HEAD")"
+          if grep -Eq '^(Sources/|Tests/|Package\.swift$|Package\.resolved$|scripts/|VERSION$|\.github/workflows/)' <<< "$changed_files"; then
+            echo "requires_macos=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "requires_macos=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  macos:
+    name: Build, test, and package
+    needs: classify
+    if: needs.classify.outputs.requires_macos == 'true'
+    runs-on: macos-15
+    timeout-minutes: 25
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
       - name: Run build and test checks
         run: ./scripts/check.sh
 
@@ -44,3 +74,24 @@ jobs:
 
       - name: Verify generated disk image
         run: hdiutil verify "BuildArtifacts/Quartz-$(tr -d '[:space:]' < VERSION).dmg"
+
+  validate:
+    name: Validate
+    needs: [classify, macos]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Verify required checks
+        env:
+          CLASSIFY_RESULT: ${{ needs.classify.result }}
+          REQUIRES_MACOS: ${{ needs.classify.outputs.requires_macos }}
+          MACOS_RESULT: ${{ needs.macos.result }}
+        run: |
+          test "$CLASSIFY_RESULT" = "success"
+          if [[ "$REQUIRES_MACOS" == "true" ]]; then
+            test "$MACOS_RESULT" = "success"
+          else
+            test "$MACOS_RESULT" = "skipped"
+          fi

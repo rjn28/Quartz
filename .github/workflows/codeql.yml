@@ -1,26 +1,60 @@
 name: CodeQL
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
   schedule:
     - cron: "17 4 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
-  security-events: write
 
 concurrency:
   group: codeql-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  analyze:
-    name: Analyze Swift
+  classify:
+    name: Classify security changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      requires_scan: ${{ steps.changes.outputs.requires_scan }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Detect changes requiring CodeQL
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [[ "$EVENT_NAME" != "pull_request" ]]; then
+            echo "requires_scan=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed_files="$(git diff --name-only "$BASE_SHA...HEAD")"
+          if grep -Eq '^(Sources/|Package\.swift$|Package\.resolved$|\.github/workflows/codeql\.yml$)' <<< "$changed_files"; then
+            echo "requires_scan=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "requires_scan=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  scan:
+    name: CodeQL scan
+    needs: classify
+    if: needs.classify.outputs.requires_scan == 'true'
     runs-on: macos-15
     timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - name: Check out repository
@@ -39,3 +73,24 @@ jobs:
         uses: github/codeql-action/analyze@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
         with:
           category: /language:swift
+
+  analyze:
+    name: Analyze Swift
+    needs: [classify, scan]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Verify required security checks
+        env:
+          CLASSIFY_RESULT: ${{ needs.classify.result }}
+          REQUIRES_SCAN: ${{ needs.classify.outputs.requires_scan }}
+          SCAN_RESULT: ${{ needs.scan.result }}
+        run: |
+          test "$CLASSIFY_RESULT" = "success"
+          if [[ "$REQUIRES_SCAN" == "true" ]]; then
+            test "$SCAN_RESULT" = "success"
+          else
+            test "$SCAN_RESULT" = "skipped"
+          fi
