@@ -42,6 +42,14 @@ Create a protected `release` environment and configure these Actions secrets:
 
 Use environment protection and least-privilege access for maintainers who may publish. Never commit or print these values.
 
+The dedicated Quartz release-tag key is public by design:
+
+- UID: `Quartz Release Signing <roch.nicolas12@gmail.com>`
+- fingerprint: `22A2 4593 6064 8A0D 14BC 03EC 32A8 B025 E786 63E5`
+- expiry: 2028-08-11
+
+Only the armored public key is stored in `TAG_SIGNING_PUBLIC_KEY`. The private key remains on the maintainer's Mac, protected by its passphrase and backed up separately from the repository and Developer ID certificate.
+
 ## Release procedure
 
 1. Ensure `main` is green and the changelog's Unreleased section is ready.

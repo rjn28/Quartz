@@ -248,7 +248,8 @@ Matrice à maintenir à chaque changement :
 | YAML workflows | parse YAML local | Réussi |
 | PDF visuel | `pdftoppm` + inspection indépendante | Réussi : 7 pages A4, lignes 1–180 continues, aucun glyphe tronqué |
 | UI smoke test assisté | lancement + contrôle accessibilité | Réussi pendant l'audit : editor/preview/split, canvas, undo/redo, raccourcis et labels AX |
-| Acceptation manuelle mainteneur | [`docs/TEST_TRACKER.md`](TEST_TRACKER.md) | Non commencée |
+| Acceptation manuelle mainteneur | [`docs/TEST_TRACKER.md`](TEST_TRACKER.md) | En cours ; lancement depuis les sources validé |
+| Préflight Developer ID/notarisation | DMG local `1.3.0 (1001)` | Réussi ; Apple `Ready for distribution`, aucun problème, Gatekeeper accepte le DMG et l'app |
 | CI distante | [run `31347600641`](https://github.com/rjn28/Quartz/actions/runs/31347600641) | Réussi (`Validate`, 1 min 28) |
 | CodeQL distant | [run `31347600613`](https://github.com/rjn28/Quartz/actions/runs/31347600613) | Réussi (`Analyze Swift`, 14 min 10) |
 
@@ -258,12 +259,13 @@ Matrice à maintenir à chaque changement :
 
 - [x] Adopter Apache-2.0, licence standard approuvée OSI, et aligner toute la documentation publique.
 - [x] Relire/merger la PR avec CI et CodeQL verts.
-- [ ] Configurer l'environnement GitHub `release` et les secrets Developer ID.
-- [ ] Créer une clé de signature Git pour les tags et documenter sa garde.
+- [x] Configurer l'environnement GitHub `release` et les secrets Developer ID.
+- [x] Créer une clé de signature Git dédiée à Quartz, limitée aux tags de release, et documenter sa garde.
 - [x] Activer les protections `main` et tags à partir des noms de checks observés.
 - [ ] Tester la migration sur une copie réelle des préférences `v1.2`.
 - [ ] Tester le DMG notarizé sur un Mac Apple Silicon propre.
-- [ ] Mettre le changelog en section datée et créer le tag signé `v1.3.0`.
+- [x] Mettre le changelog en section datée pour `v1.3.0`.
+- [ ] Créer et pousser le tag signé `v1.3.0` depuis le commit de release validé.
 
 ### P1 après release
 
