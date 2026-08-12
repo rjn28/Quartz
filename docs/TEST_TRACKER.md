@@ -65,6 +65,7 @@ These checks were executed during the modernization work. Re-run `./scripts/chec
 | `AUTO-005` | GitHub CI on merged `main` | `PASS` | 2026-08-10 | [CI run 31418712057](https://github.com/rjn28/Quartz/actions/runs/31418712057) |
 | `AUTO-006` | CodeQL Swift analysis on merged `main` | `PASS` | 2026-08-10 | [CodeQL run 31418711189](https://github.com/rjn28/Quartz/actions/runs/31418711189) |
 | `AUTO-007` | Code/dependency/secret alert review | `PASS` (0 open) | 2026-08-10 | GitHub CodeQL, Dependabot, and secret scanning |
+| `AUTO-008` | Developer ID signature and Apple notarization preflight | `PASS` | 2026-08-13 | Apple submission `af8a2581-ceec-4fdb-a6bf-d79644f47162`; no issues; stapled DMG and embedded app accepted by Gatekeeper |
 
 ## Maintainer manual acceptance
 

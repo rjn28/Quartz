@@ -4,6 +4,8 @@ All notable changes to Quartz are documented here. The project follows [Semantic
 
 ## Unreleased
 
+## 1.3.0 - 2026-08-13
+
 ### Added
 
 - SwiftPM test target with coverage for statistics, persistence, migrations, drawing geometry, view models, TXT export, and paginated PDF export.
