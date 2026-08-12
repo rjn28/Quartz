@@ -2,11 +2,11 @@
 
 > Living record for automated validation, manual acceptance testing, and release readiness.
 >
-> Last updated: 2026-08-11
+> Last updated: 2026-08-13
 >
-> Current tested commit: `b19312c` (`main`, Quartz `1.3.0` pre-release)
+> Current tested commit: `a093140` (`v1.3.0`, public release)
 >
-> Maintainer acceptance testing: not started
+> Maintainer acceptance testing: in progress
 
 ## How to use this tracker
 
@@ -37,10 +37,10 @@ If a test fails, keep it `FAIL` until the fix is verified. Link the issue or pul
 
 | Test set | PASS | FAIL | NOT RUN | BLOCKED | RETEST |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Automated baseline | 7 | 0 | 0 | 0 | 0 |
-| Maintainer manual acceptance | 0 | 0 | 22 | 2 | 0 |
+| Automated baseline | 10 | 0 | 0 | 0 | 0 |
+| Maintainer manual acceptance | 1 | 0 | 22 | 1 | 0 |
 
-Release readiness is **not achieved**: maintainer acceptance has not started, Apple Developer credentials are not configured, and no notarized release candidate exists.
+Quartz `v1.3.0` is public, signed, notarized, and automatically verified. Maintainer acceptance remains incomplete: the real v1.2 migration and a clean-Mac install are the highest-priority manual checks.
 
 ## Test environment
 
@@ -66,6 +66,8 @@ These checks were executed during the modernization work. Re-run `./scripts/chec
 | `AUTO-006` | CodeQL Swift analysis on merged `main` | `PASS` | 2026-08-10 | [CodeQL run 31418711189](https://github.com/rjn28/Quartz/actions/runs/31418711189) |
 | `AUTO-007` | Code/dependency/secret alert review | `PASS` (0 open) | 2026-08-10 | GitHub CodeQL, Dependabot, and secret scanning |
 | `AUTO-008` | Developer ID signature and Apple notarization preflight | `PASS` | 2026-08-13 | Apple submission `af8a2581-ceec-4fdb-a6bf-d79644f47162`; no issues; stapled DMG and embedded app accepted by Gatekeeper |
+| `AUTO-009` | Protected release workflow | `PASS` | 2026-08-13 | [Release run 31652290027](https://github.com/rjn28/Quartz/actions/runs/31652290027); signed tag, exact `main` commit, tests, signing, notarization, checksum, attestation, and publication |
+| `AUTO-010` | Public `v1.3.0` artifact verification | `PASS` | 2026-08-13 | SHA-256 and GitHub attestation verified; stapled DMG/app accepted by Gatekeeper; Developer ID team `KZET75GDV4`; `arm64`; version `1.3.0 (1001)` |
 
 ## Maintainer manual acceptance
 
@@ -95,7 +97,7 @@ Use a disposable note unless the procedure explicitly requires legacy data. Reco
 | `MAN-020` | Offline/privacy smoke test | Disable networking, edit/draw/relaunch/export, and confirm all core functions work; Quartz should require no account or network. | `NOT RUN` | — | — | — |
 | `ADV-001` | Real v1.2 migration | On a backup or disposable macOS account, load copied real v1.2 preferences, launch 1.3.0, and verify legacy text and canvas survive together. Do not use the only copy of important data. | `NOT RUN` | — | — | Requires a real v1.2 fixture |
 | `ADV-002` | Recovery behavior | On a disposable preferences domain, introduce a corrupted library blob and verify Quartz quarantines it instead of silently overwriting recoverable data. | `NOT RUN` | — | — | Run with developer guidance |
-| `REL-001` | Notarized clean install | Download the future signed release on a clean Apple Silicon Mac; checksum, attestation, Gatekeeper, notarization ticket, install, and first launch all pass. | `BLOCKED` | — | — | No notarized release candidate yet |
+| `REL-001` | Notarized clean install | Download `v1.3.0` on a clean Apple Silicon Mac; checksum, attestation, Gatekeeper, notarization ticket, install, and first launch all pass. | `NOT RUN` | — | — | Public artifact is available; automated integrity and trust checks passed on the primary Mac |
 | `REL-002` | Sparkle update | Upgrade between two notarized versions through a signed HTTPS appcast; signature failure and rollback behavior are fail-closed. | `BLOCKED` | — | — | Sparkle is intentionally deferred until after first notarized release |
 
 ## Suggested execution order

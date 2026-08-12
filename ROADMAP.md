@@ -2,11 +2,11 @@
 
 The roadmap is intentionally short. Priorities can change after user feedback or security findings; completed audit evidence and decision history live in [docs/PROJECT_AUDIT.md](docs/PROJECT_AUDIT.md).
 
-## Now — v1.3.0 release validation
+## Now — v1.3.0 post-release validation
 
 - Validate the real v1.2 preference migration on a backup or disposable macOS account.
-- Publish the prepared Developer ID-signed, notarized, checksummed, and attested Apple Silicon `v1.3.0` release.
 - Download the public artifact on a clean Apple Silicon Mac and verify Gatekeeper, installation, launch, persistence, and exports.
+- Monitor release feedback and security alerts before starting the first Sparkle-enabled update cycle.
 - Keep Apache-2.0 metadata, the required `main` checks, and immutable release-tag rules enforced.
 
 ## Next — data durability and product polish
