@@ -250,6 +250,8 @@ Matrice à maintenir à chaque changement :
 | UI smoke test assisté | lancement + contrôle accessibilité | Réussi pendant l'audit : editor/preview/split, canvas, undo/redo, raccourcis et labels AX |
 | Acceptation manuelle mainteneur | [`docs/TEST_TRACKER.md`](TEST_TRACKER.md) | En cours ; lancement depuis les sources validé |
 | Préflight Developer ID/notarisation | DMG local `1.3.0 (1001)` | Réussi ; Apple `Ready for distribution`, aucun problème, Gatekeeper accepte le DMG et l'app |
+| Release publique `v1.3.0` | [workflow `31652290027`](https://github.com/rjn28/Quartz/actions/runs/31652290027) | Réussi ; tag GPG, tests, Developer ID, notarisation, ticket, checksum, attestation et publication |
+| Artefact GitHub téléchargé | [`Quartz 1.3.0`](https://github.com/rjn28/Quartz/releases/tag/v1.3.0) | Réussi ; SHA-256 et attestation vérifiés, DMG/app acceptés par Gatekeeper, `arm64`, version `1.3.0 (1001)` |
 | CI distante | [run `31347600641`](https://github.com/rjn28/Quartz/actions/runs/31347600641) | Réussi (`Validate`, 1 min 28) |
 | CodeQL distant | [run `31347600613`](https://github.com/rjn28/Quartz/actions/runs/31347600613) | Réussi (`Analyze Swift`, 14 min 10) |
 
@@ -265,7 +267,7 @@ Matrice à maintenir à chaque changement :
 - [ ] Tester la migration sur une copie réelle des préférences `v1.2`.
 - [ ] Tester le DMG notarizé sur un Mac Apple Silicon propre.
 - [x] Mettre le changelog en section datée pour `v1.3.0`.
-- [ ] Créer et pousser le tag signé `v1.3.0` depuis le commit de release validé.
+- [x] Créer et pousser le tag signé `v1.3.0` depuis le commit de release validé.
 
 ### P1 après release
 
