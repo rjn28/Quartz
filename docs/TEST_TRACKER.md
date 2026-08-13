@@ -119,7 +119,7 @@ Append one row per test session, even if no case completes. Keep concise detail 
 
 | Date/time | Environment | Build / commit | Tests attempted | Outcome summary | Issues / evidence |
 | --- | --- | --- | --- | --- | --- |
-| — | — | — | — | Maintainer acceptance not started | — |
+| 2026-08-13 01:59 CEST | Primary maintainer Mac / Apple Silicon | Public `v1.3.0` | Gatekeeper portion of `REL-001` | Standard first-open confirmation shown; Apple reports its malware check found nothing. No damaged-app, unidentified-developer, or notarization error. | Screenshot reported by maintainer; first launch after clicking Open and clean-Mac coverage remain to be recorded. |
 
 ## Release acceptance rule
 
