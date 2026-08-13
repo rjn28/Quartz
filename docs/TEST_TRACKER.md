@@ -38,13 +38,15 @@ If a test fails, keep it `FAIL` until the fix is verified. Link the issue or pul
 | Test set | PASS | FAIL | NOT RUN | BLOCKED | RETEST |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Automated baseline | 10 | 0 | 0 | 0 | 0 |
-| Maintainer manual acceptance | 1 | 0 | 22 | 1 | 0 |
+| Maintainer manual acceptance | 2 | 0 | 21 | 1 | 0 |
 
 Quartz `v1.3.0` is public, signed, notarized, and automatically verified. Maintainer acceptance remains incomplete: the real v1.2 migration and a clean-Mac install are the highest-priority manual checks.
 
 ## Test environment
 
 Complete or add a row for each materially different environment used. Never replace an older row that supports a recorded result.
+
+A newly provisioned VirtualBuddy macOS VM counts as a clean environment for `REL-001` when it has never contained Quartz or copied host preferences. Record it explicitly as virtual: it validates the fresh-user, Gatekeeper, persistence, and export paths, but does not replace physical-hardware testing when a feature depends on a device or accelerated hardware.
 
 | Environment ID | Mac | Chip | macOS | Display / accessibility settings | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -93,11 +95,11 @@ Use a disposable note unless the procedure explicitly requires legacy data. Reco
 | `MAN-016` | Keyboard and Zen Mode | Test mode shortcuts, drawing undo/redo, Escape/Return where applicable, and Zen Mode; focus and controls remain recoverable. | `NOT RUN` | — | — | — |
 | `MAN-017` | VoiceOver | Navigate the editor, mode controls, statistics, drawing tools/colors, saved notes, and export actions; labels and selected values are understandable. | `NOT RUN` | — | — | — |
 | `MAN-018` | Reduce Motion | Enable Reduce Motion in macOS and repeat control reveal/hide and mode changes; no unnecessary animation or loss of state occurs. | `NOT RUN` | — | — | — |
-| `MAN-019` | Local DMG | Mount `BuildArtifacts/Quartz-1.3.0.dmg`, copy the app, and inspect/launch it for local testing; record any expected ad hoc Gatekeeper warning separately from app defects. | `NOT RUN` | — | — | — |
+| `MAN-019` | Public notarized DMG | Download and mount the public `v1.3.0` DMG on the primary Mac, accept the standard first-open confirmation, and verify Quartz launches without a damaged-app, unidentified-developer, or notarization error. | `PASS` | 2026-08-13 | Primary maintainer Mac / Apple Silicon | Gatekeeper reported that Apple found no malware; maintainer confirmed the app opened successfully. |
 | `MAN-020` | Offline/privacy smoke test | Disable networking, edit/draw/relaunch/export, and confirm all core functions work; Quartz should require no account or network. | `NOT RUN` | — | — | — |
 | `ADV-001` | Real v1.2 migration | On a backup or disposable macOS account, load copied real v1.2 preferences, launch 1.3.0, and verify legacy text and canvas survive together. Do not use the only copy of important data. | `NOT RUN` | — | — | Requires a real v1.2 fixture |
 | `ADV-002` | Recovery behavior | On a disposable preferences domain, introduce a corrupted library blob and verify Quartz quarantines it instead of silently overwriting recoverable data. | `NOT RUN` | — | — | Run with developer guidance |
-| `REL-001` | Notarized clean install | Download `v1.3.0` on a clean Apple Silicon Mac; checksum, attestation, Gatekeeper, notarization ticket, install, and first launch all pass. | `NOT RUN` | — | — | Public artifact is available; automated integrity and trust checks passed on the primary Mac |
+| `REL-001` | Notarized clean install | Download `v1.3.0` on a clean physical Apple Silicon Mac or newly provisioned VirtualBuddy macOS VM; checksum, attestation, Gatekeeper, notarization ticket, install, and first launch all pass. | `NOT RUN` | — | — | Public artifact is available; automated integrity and trust checks passed on the primary Mac |
 | `REL-002` | Sparkle update | Upgrade between two notarized versions through a signed HTTPS appcast; signature failure and rollback behavior are fail-closed. | `BLOCKED` | — | — | Sparkle is intentionally deferred until after first notarized release |
 
 ## Suggested execution order
@@ -119,7 +121,7 @@ Append one row per test session, even if no case completes. Keep concise detail 
 
 | Date/time | Environment | Build / commit | Tests attempted | Outcome summary | Issues / evidence |
 | --- | --- | --- | --- | --- | --- |
-| 2026-08-13 01:59 CEST | Primary maintainer Mac / Apple Silicon | Public `v1.3.0` | Gatekeeper portion of `REL-001` | Standard first-open confirmation shown; Apple reports its malware check found nothing. No damaged-app, unidentified-developer, or notarization error. | Screenshot reported by maintainer; first launch after clicking Open and clean-Mac coverage remain to be recorded. |
+| 2026-08-13 01:59 CEST | Primary maintainer Mac / Apple Silicon | Public `v1.3.0` | `MAN-019`; Gatekeeper portion of `REL-001` | `MAN-019` passed: standard first-open confirmation shown, Apple reported no malware, and Quartz opened successfully. | Screenshot and successful launch reported by maintainer; clean-Mac coverage remains to be recorded under `REL-001`. |
 
 ## Release acceptance rule
 
