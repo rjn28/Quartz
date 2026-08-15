@@ -309,6 +309,7 @@ Matrice à maintenir à chaque changement :
 | 2026-08-10 | Documentation anglaise, README EN/FR | corpus technique uniforme avec accueil GitHub bilingue | Oui |
 | 2026-08-10 | Thème, police et mode restent par note | choix d'expérience explicite du mainteneur | Oui avec migration |
 | 2026-08-10 | Nettoyage `.build` autorisé si chronologie préservée | réduire le dépôt sans effacer son ancienneté visible | Réécrit les hashes, sauvegarde requise |
+| 2026-08-15 | Préparer une distribution Mac App Store gratuite en plus du DMG GitHub | élargir la distribution sans abandonner le canal direct ni mélanger leurs mécanismes de mise à jour | Oui |
 
 ## 11. Cadence d'entretien recommandée
 
