@@ -11,6 +11,7 @@ The roadmap is intentionally short. Priorities can change after user feedback or
 
 ## Next — data durability and product polish
 
+- Prepare a sandboxed, Apple Silicon-only Mac App Store build using the staged plan in [docs/MAC_APP_STORE.md](docs/MAC_APP_STORE.md), while keeping direct GitHub distribution available.
 - Move notes from one `UserDefaults` blob to independently stored, atomic, versioned records in Application Support.
 - Normalize drawing coordinates so canvases adapt cleanly to window resizing.
 - Add UI automation for launch, multi-window restoration, keyboard commands, VoiceOver, and export flows.
@@ -28,5 +29,4 @@ The roadmap is intentionally short. Priorities can change after user feedback or
 ## Explicit non-goals for now
 
 - Accounts, analytics, advertising, or required network access.
-- Mac App Store distribution; the current release strategy remains direct Developer ID distribution with notarization.
 - Large third-party UI or persistence frameworks without a demonstrated need.

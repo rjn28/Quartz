@@ -38,7 +38,7 @@ If a test fails, keep it `FAIL` until the fix is verified. Link the issue or pul
 | Test set | PASS | FAIL | NOT RUN | BLOCKED | RETEST |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Automated baseline | 10 | 0 | 0 | 0 | 0 |
-| Maintainer manual acceptance | 2 | 0 | 21 | 1 | 0 |
+| Maintainer manual acceptance | 2 | 0 | 21 | 2 | 0 |
 
 Quartz `v1.3.0` is public, signed, notarized, and automatically verified. Maintainer acceptance remains incomplete: the real v1.2 migration and a clean-Mac install are the highest-priority manual checks.
 
@@ -101,6 +101,7 @@ Use a disposable note unless the procedure explicitly requires legacy data. Reco
 | `ADV-002` | Recovery behavior | On a disposable preferences domain, introduce a corrupted library blob and verify Quartz quarantines it instead of silently overwriting recoverable data. | `NOT RUN` | — | — | Run with developer guidance |
 | `REL-001` | Notarized clean install | Download `v1.3.0` on a clean physical Apple Silicon Mac or newly provisioned VirtualBuddy macOS VM; checksum, attestation, Gatekeeper, notarization ticket, install, and first launch all pass. | `NOT RUN` | — | — | Public artifact is available; automated integrity and trust checks passed on the primary Mac |
 | `REL-002` | Sparkle update | Upgrade between two notarized versions through a signed HTTPS appcast; signature failure and rollback behavior are fail-closed. | `BLOCKED` | — | — | Sparkle is intentionally deferred until after first notarized release |
+| `REL-003` | Mac App Store build | Install the sandboxed Store build through TestFlight on a clean Apple Silicon environment; verify launch, persistence, multiple windows, drawing, user-selected TXT/PDF exports, offline behavior, and the documented direct-build data transfer. | `BLOCKED` | — | — | Requires the Xcode app target, sandbox-compatible exports, data-transfer path, and App Store Connect record tracked in `docs/MAC_APP_STORE.md` |
 
 ## Suggested execution order
 
@@ -111,7 +112,7 @@ To make progress without turning testing into a single long session:
 3. `MAN-012` through `MAN-016`: exports and daily interaction;
 4. `MAN-017` through `MAN-020`: accessibility, appearance, and privacy;
 5. `ADV-001` and `ADV-002`: guarded migration/recovery exercises;
-6. `REL-001` and `REL-002`: only when their release prerequisites exist.
+6. `REL-001` through `REL-003`: only when their release prerequisites exist.
 
 Stop normal testing after a data-loss, launch-crash, or reproducible export-corruption failure. Preserve the affected preferences/export and open a defect before continuing destructive scenarios.
 
@@ -135,3 +136,4 @@ A release candidate is ready for public release only when:
 - checksum and GitHub attestation verification instructions are confirmed against the published files.
 
 `REL-002` is not required for the first notarized release because Sparkle is deliberately scheduled afterward.
+`REL-003` applies to the first Mac App Store submission and does not retroactively block the direct `v1.3.0` release.
