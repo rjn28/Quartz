@@ -32,9 +32,13 @@
 Quartz gives your words room to breathe. Write a note, see your Markdown take shape, or open a canvas to sketch an idea. Your work stays on your Mac, without an account, cloud sync, analytics, or a required connection.
 
 <p align="center">
-  <a href="docs/screenshots/markdown-dark.png"><img src="docs/screenshots/markdown-dark.png" width="960" alt="Quartz in dark appearance, with the original The Art of Focus text beside its rendered Markdown preview and the resizable split-view controls"></a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/markdown-dark.jpg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/markdown-light.jpg">
+    <img src="docs/screenshots/markdown-light.jpg" width="960" alt="Quartz with the original The Art of Focus text on the left and its rendered Markdown preview on the right">
+  </picture>
   <br>
-  <sub>Write on the left. See it take shape on the right. Markdown split view in dark appearance.</sub>
+  <sub>Write on the left. See it take shape on the right. Markdown split view in light or dark appearance.</sub>
 </p>
 
 ## A little space. A lot of possibility.
@@ -48,12 +52,16 @@ Quartz gives your words room to breathe. Write a note, see your Markdown take sh
 | **↗ Take it with you** | Click or drag to export text as TXT or a paginated PDF, depending on the editor mode. |
 | **⌘ Make yourself at home** | Keyboard commands, VoiceOver labels, and word, character, line, and reading-time statistics. |
 
-### Light when you want it
+### Your space, light or dark
 
 <p align="center">
-  <a href="docs/screenshots/editor-light.png"><img src="docs/screenshots/editor-light.png" width="800" alt="Quartz text editor in light appearance with The Art of Focus, the floating controls, and TXT export"></a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/editor-dark.jpg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/editor-light.jpg">
+    <img src="docs/screenshots/editor-light.jpg" width="800" alt="Quartz editor with the original The Art of Focus text and controls hidden while writing">
+  </picture>
   <br>
-  <sub>The same quiet space, in light appearance. Actual captures from the current source build.</sub>
+  <sub>The same quiet space, in light or dark appearance. Screenshots captured manually in Quartz.</sub>
 </p>
 
 <details>
