@@ -32,9 +32,13 @@
 Quartz laisse vos idées respirer. Écrivez une note, regardez votre Markdown prendre forme ou ouvrez le canevas pour esquisser une idée. Votre travail reste sur votre Mac, sans compte, synchronisation cloud, analyse d’usage ni connexion obligatoire.
 
 <p align="center">
-  <a href="docs/screenshots/markdown-dark.png"><img src="docs/screenshots/markdown-dark.png" width="960" alt="Quartz en apparence sombre : le texte original The Art of Focus à gauche, son aperçu Markdown à droite et les commandes de la vue divisée redimensionnable"></a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/markdown-dark.jpg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/markdown-light.jpg">
+    <img src="docs/screenshots/markdown-light.jpg" width="960" alt="Quartz : le texte original The Art of Focus à gauche et son aperçu Markdown à droite">
+  </picture>
   <br>
-  <sub>Écrivez à gauche. Voyez le résultat à droite. La vue Markdown divisée, en apparence sombre.</sub>
+  <sub>Écrivez à gauche. Voyez le résultat à droite. La vue Markdown divisée, en clair ou en sombre.</sub>
 </p>
 
 ## De la place pour chaque idée
@@ -48,12 +52,16 @@ Quartz laisse vos idées respirer. Écrivez une note, regardez votre Markdown pr
 | **↗ Emportez vos mots** | Export du texte en TXT ou PDF paginé, par clic ou glisser-déposer, selon le mode de l’éditeur. |
 | **⌘ Prenez vos habitudes** | Raccourcis clavier, libellés VoiceOver et statistiques de mots, caractères, lignes et temps de lecture. |
 
-### Place à la lumière
+### Votre espace, clair ou sombre
 
 <p align="center">
-  <a href="docs/screenshots/editor-light.png"><img src="docs/screenshots/editor-light.png" width="800" alt="Éditeur Quartz en apparence claire avec The Art of Focus, les commandes flottantes et l’export TXT"></a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/editor-dark.jpg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/editor-light.jpg">
+    <img src="docs/screenshots/editor-light.jpg" width="800" alt="Éditeur Quartz avec le texte original The Art of Focus et ses commandes masquées pendant l’écriture">
+  </picture>
   <br>
-  <sub>Le même espace paisible, en apparence claire. Captures réelles de l’application compilée depuis les sources actuelles.</sub>
+  <sub>Le même espace paisible, en clair ou en sombre. Captures réalisées manuellement dans Quartz.</sub>
 </p>
 
 <details>
